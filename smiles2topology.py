@@ -19,7 +19,7 @@ class MyOwnDataset(InMemoryDataset):
 
     @property
     def raw_file_names(self):
-        return ['some_file_1', 'some_file_2', ...]
+        return ['Lovric2020_logS0']
 
     @property
     def processed_file_names(self):
