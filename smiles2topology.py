@@ -35,6 +35,7 @@ class MyOwnDataset(InMemoryDataset):
         for index, row in file.iterrows():
             smiles = row['isomeric_smiles']
             logS = row['logS0']
+            pass
 
 
 
