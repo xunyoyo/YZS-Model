@@ -19,23 +19,27 @@ class MyOwnDataset(InMemoryDataset):
 
     @property
     def raw_file_names(self):
-        return ['Lovric2020_logS0']
+        return ['data_train.csv']
 
     @property
     def processed_file_names(self):
-        return ['data.pt']
+        return ['processed_data_train.pt']
 
     def download(self):
         pass
 
     def pro_process(self, data_path, data_dict):
-        datas = pd.read_csv(data_path)
+        file = pd.read_csv(data_path)
 
         data_lists = []
-        for index, row in datas.iterrows():
-            pass
+        for index, row in file.iterrows():
+            smiles = row['isomeric_smiles']
+            logS = row['logS0']
 
-    # 重构一下process方法
+
+
+
+            # 重构一下process方法
     def process(self):
         pass
 
