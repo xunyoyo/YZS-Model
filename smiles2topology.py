@@ -28,11 +28,15 @@ class MyOwnDataset(InMemoryDataset):
     def download(self):
         pass
 
-    def process_data(self, data_path, data_dict):
+    def pro_process(self, data_path, data_dict):
         datas = pd.read_csv(data_path)
 
         data_lists = []
         for index, row in datas.iterrows():
             pass
+
+    # 重构一下process方法
+    def process(self):
+        pass
 
     pass
