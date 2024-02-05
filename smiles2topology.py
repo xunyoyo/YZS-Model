@@ -21,5 +21,7 @@ class GNNDataset(InMemoryDataset):
         datas = pd.read_csv(data_path)
 
         data_lists = []
+        for index, row in datas.iterrows():
+            pass
 
     pass
