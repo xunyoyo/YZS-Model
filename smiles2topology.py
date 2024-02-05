@@ -91,7 +91,6 @@ class MyOwnDataset(InMemoryDataset):
                        # NumRadicalElectrons=atom_i.GetNumRadicalElectrons(),
                        )
 
-
         for i in range(len(features)):
             pass
 
