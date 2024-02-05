@@ -17,4 +17,5 @@ class GNNDataset(InMemoryDataset):
 
     def process_data(self, data_path, data_dict):
         pass
+
     pass
