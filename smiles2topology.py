@@ -1,16 +1,13 @@
 import os.path as op
-import numpy
 import pandas as pd
 import torch
 from torch_geometric.data import InMemoryDataset
 from torch_geometric import data as DATA
 import networkx as nx
 from rdkit import Chem
-from rdkit.Chem import MolFromSmiles
 from rdkit.Chem import ChemicalFeatures
 from rdkit import RDConfig
 from tqdm import tqdm
-
 fdef_name = op.join(RDConfig.RDDataDir, 'BaseFeatures.fdef')
 chem_feature_factory = ChemicalFeatures.BuildFeatureFactory(fdef_name)
 
@@ -52,11 +49,11 @@ class MyOwnDataset(InMemoryDataset):
 
             try:
                 data = DATA.Data(
-                    x = x,
-                    edge_index = edge_index,
-                    edge_index2 = edge_index2,
-                    edge_attr = edge_attr,
-                    y = torch.FloatTensor([logS])
+                    x=x,
+                    edge_index=edge_index,
+                    edge_index2=edge_index2,
+                    edge_attr=edge_attr,
+                    y=torch.FloatTensor([logS])
                 )
             except:
                 print("这个SMILE无法处理: ", smiles)
@@ -92,12 +89,10 @@ class MyOwnDataset(InMemoryDataset):
         data, slices = self.collate(train_list)
         torch.save((data, slices), self.processed_paths[0])
 
-
     def mol2graph(self, mol):
         if mol is None:
             return None
 
-        features = chem_feature_factory.GetFeaturesForMol(mol)
         graph = nx.DiGraph()
 
         # 创建点
@@ -138,7 +133,6 @@ class MyOwnDataset(InMemoryDataset):
             for j in range(mol.GetNumAtoms()):
                 e_ij = mol.GetBondBetweenAtoms(i, j)
                 if e_ij is not None:
-
                     """
                     bond_type: 键的类型
                     IsConjugated: 是否共轭
@@ -182,12 +176,12 @@ class MyOwnDataset(InMemoryDataset):
     def get_edges(self, graph):
         edge = {}
         for u, v, feat in graph.edges(data=True):
-            e_t=[int(feat['bond_type'] == x)
-                for x in (Chem.rdchem.BondType.SINGLE,
-                          Chem.rdchem.BondType.DOUBLE,
-                          Chem.rdchem.BondType.TRIPLE,
-                          Chem.rdchem.BondType.AROMATIC)
-                ]
+            e_t = [int(feat['bond_type'] == x)
+                   for x in (Chem.rdchem.BondType.SINGLE,
+                             Chem.rdchem.BondType.DOUBLE,
+                             Chem.rdchem.BondType.TRIPLE,
+                             Chem.rdchem.BondType.AROMATIC)
+                   ]
             e_t.append(int(feat['IsConjugated'] == False))
             e_t.append(int(feat['IsConjugated'] == True))
             edge[(u, v)] = e_t
@@ -204,6 +198,7 @@ class MyOwnDataset(InMemoryDataset):
         As = As.dot(As)
         edge_index2 = torch.LongTensor(As.nonzero())
         return edge_index2
+
 
 if __name__ == "__main__":
     MyOwnDataset('Datasets')
