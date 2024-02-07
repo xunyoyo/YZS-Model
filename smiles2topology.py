@@ -43,7 +43,27 @@ class MyOwnDataset(InMemoryDataset):
             smiles = row['isomeric_smiles']
             logS = row['logS0']
 
-            # 重构一下process方法
+            x, edge_index, edge_index2, edge_attr = data_dict[smiles]
+
+            if x.max() == x.min():
+                x = (x - x.min()) / 0.000001
+            else:
+                x = (x - x.min()) / (x.max() - x.min())
+
+            try:
+                data = DATA.Data(
+                    x = x,
+                    edge_index = edge_index,
+                    edge_index2 = edge_index2,
+                    edge_attr = edge_attr,
+                    y = torch.FloatTensor([logS])
+                )
+            except:
+                print("这个SMILE无法处理: ", smiles)
+
+            data_lists.append(data)
+
+        return data_lists
 
     def process(self):
         file_train = pd.read_csv(self.raw_paths[0])
@@ -57,16 +77,21 @@ class MyOwnDataset(InMemoryDataset):
             g = self.mol2graph(mol)
             graph_dict[smile] = g
 
+        train_list = self.pre_process(self.raw_paths[0], graph_dict)
 
-        # train_list =
+        if self.pre_filter is not None:
+            train_list = [train for train in train_list if self.pre_filter(train)]
+            # test_list = [test for test in test_list if self.pre_filter(test)]
 
-        # if self.pre_filter is not None:
-        #     train_list = [train for train in train_list if self.pre_filter(train)]
-        #     test_list = [test for test in test_list if self.pre_filter(test)]
-        #
-        # if self.pre_transform is not None:
-        #     train_list = [self.pre_transform(train) for train in train_list]
-        #     test_list = [self.pre_transform(test) for test in test_list]
+        if self.pre_transform is not None:
+            train_list = [self.pre_transform(train) for train in train_list]
+            # test_list = [self.pre_transform(test) for test in test_list]
+
+        print("图建完了。")
+
+        data, slices = self.collate(train_list)
+        torch.save((data, slices), self.processed_paths[0])
+
 
     def mol2graph(self, mol):
         if mol is None:
@@ -126,18 +151,18 @@ class MyOwnDataset(InMemoryDataset):
                     )
 
         node_attr = self.get_nodes(graph)
+        edge_index, edge_attr = self.get_edges(graph)
+        edge_index2 = self.get_2hop(graph)
 
+        return node_attr, edge_index, edge_index2, edge_attr
 
     def get_nodes(self, graph):
         feature = []
 
         for node, feat in graph.nodes(data=True):
-            """
-            h_t: [[0,1,0,0,0,0],1,0,[0,0,0,1]]
-            """
             h_t = []
             # 元素符号作为标记加入特征
-            h_t += [int(feat['atom_symbol']) for x in ['H', 'C', 'N', 'O', 'F', 'Cl', 'S', 'Br', 'I', 'P', '']]
+            h_t += [int(feat['atom_symbol'] == x) for x in ['H', 'C', 'N', 'O', 'F', 'Cl', 'S', 'Br', 'I', 'P']]
             h_t.append(feat['atom_id'])
             h_t.append(int(feat['is_aromatic']))
             h_t += [int(feat['hybridization'] == x)
@@ -170,3 +195,15 @@ class MyOwnDataset(InMemoryDataset):
         if len(edge) == 0:
             return torch.LongTensor([[0], [0]]), torch.FloatTensor([[0, 0, 0, 0, 0, 0]])
 
+        edge_index = torch.LongTensor(list(edge.keys())).transpose(0, 1)
+        edge_attr = torch.FloatTensor(list(edge.values()))
+        return edge_index, edge_attr
+
+    def get_2hop(self, graph):
+        As = nx.adjacency_matrix(graph)
+        As = As.dot(As)
+        edge_index2 = torch.LongTensor(As.nonzero())
+        return edge_index2
+
+if __name__ == "__main__":
+    MyOwnDataset('Datasets')
