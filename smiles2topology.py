@@ -1,15 +1,15 @@
-import os.path as op
+"""
+By xunyoyo & kesmeey
+Part of code come from GitHub:
+https://github.com/ziduzidu/CSDTI
+"""
 import pandas as pd
 import torch
 from torch_geometric.data import InMemoryDataset
 from torch_geometric import data as DATA
 import networkx as nx
 from rdkit import Chem
-from rdkit.Chem import ChemicalFeatures
-from rdkit import RDConfig
 from tqdm import tqdm
-fdef_name = op.join(RDConfig.RDDataDir, 'BaseFeatures.fdef')
-chem_feature_factory = ChemicalFeatures.BuildFeatureFactory(fdef_name)
 
 
 class MyOwnDataset(InMemoryDataset):
@@ -106,7 +106,6 @@ class MyOwnDataset(InMemoryDataset):
             hybridization: 杂化情况
             FormalCharge: 形式电荷情况
             IsInRing: 是否在环中
-            待定ing
             """
             graph.add_node(
                 i,
@@ -117,15 +116,6 @@ class MyOwnDataset(InMemoryDataset):
                 num_h=atom_i.GetTotalNumHs(),
                 FormalCharge=atom_i.GetFormalCharge(),
                 IsInRing=atom_i.IsInRing(),
-                # acceptor=0,
-                # donor=0,
-                #
-                #
-                # # 5 more node features
-                # ExplicitValence=atom_i.GetExplicitValence(),
-                # ImplicitValence=atom_i.GetImplicitValence(),
-                # NumExplicitHs=atom_i.GetNumExplicitHs(),
-                # NumRadicalElectrons=atom_i.GetNumRadicalElectrons(),
             )
 
         # 连接边
@@ -136,7 +126,6 @@ class MyOwnDataset(InMemoryDataset):
                     """
                     bond_type: 键的类型
                     IsConjugated: 是否共轭
-                    
                     """
                     graph.add_edge(
                         i, j,
