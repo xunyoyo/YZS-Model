@@ -86,6 +86,7 @@ class MyOwnDataset(InMemoryDataset):
             hybridization: 杂化情况
             FormalCharge: 形式电荷情况
             IsInRing: 是否在环中
+            待定ing
             """
             graph.add_node(
                 i,
@@ -124,6 +125,38 @@ class MyOwnDataset(InMemoryDataset):
                         IsConjugated=int(e_ij.GetIsConjugated()),
                     )
 
+        node_attr = self.get_nodes(graph)
+
 
     def get_nodes(self, graph):
-        pass
+        feature = []
+
+        for node, feat in graph.nodes(data=True):
+            h_t = []
+            # 元素符号作为标记加入特征
+            h_t += [int(feat['atom_symbol']) for x in ['H', 'C', 'N', 'O', 'F', 'Cl', 'S', 'Br', 'I', 'P', '']]
+            h_t.append(feat['atom_id'])
+            h_t.append(int(feat['is_aromatic']))
+            h_t += [int(feat['hybridization'] == x)
+                    for x in (Chem.rdchem.HybridizationType.SP,
+                              Chem.rdchem.HybridizationType.SP2,
+                              Chem.rdchem.HybridizationType.SP3)
+                    ]
+            h_t.append(feat['FormalCharge'])
+            h_t.append(int(feat['IsInRing']))
+
+        feature.sort(key=lambda item: item[0])
+        node_attr = torch.FloatTensor([item[1] for item in feature])
+
+        return node_attr
+
+    def get_edges(self, graph):
+        edge = {}
+        for u, v, feat in graph.edges(data=True):
+            e_t = []
+            e_t.append([int(feat['bond_type'] == x)
+                        for x in (Chem.rdchem.BondType.SINGLE,
+                                  Chem.rdchem.BondType.DOUBLE,
+                                  Chem.rdchem.BondType.TRIPLE,
+                                  Chem.rdchem.BondType.AROMATIC)
+                        ])
