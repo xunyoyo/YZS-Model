@@ -10,6 +10,7 @@ from rdkit.Chem import MolFromSmiles
 from rdkit.Chem import ChemicalFeatures
 from rdkit import RDConfig
 from tqdm import tqdm
+
 fdef_name = op.join(RDConfig.RDDataDir, 'BaseFeatures.fdef')
 chem_feature_factory = ChemicalFeatures.BuildFeatureFactory(fdef_name)
 
@@ -43,6 +44,7 @@ class MyOwnDataset(InMemoryDataset):
             logS = row['logS0']
 
             # 重构一下process方法
+
     def process(self):
         file_train = pd.read_csv(self.raw_paths[0])
         file = file_train
@@ -54,6 +56,7 @@ class MyOwnDataset(InMemoryDataset):
             mol = Chem.MolFromSmiles(smile)
             g = self.mol2graph(mol)
             graph_dict[smile] = g
+
 
         # train_list =
 
@@ -72,27 +75,55 @@ class MyOwnDataset(InMemoryDataset):
         features = chem_feature_factory.GetFeaturesForMol(mol)
         graph = nx.DiGraph()
 
+        # 创建点
         for i in range(mol.GetNumAtoms()):
             atom_i = mol.GetAtomWithIdx(i)
-            graph.add_node(i,
-                       # a_type=atom_i.GetSymbol(),
-                       # a_num=atom_i.GetAtomicNum(),
-                       # acceptor=0,
-                       # donor=0,
-                       # aromatic=atom_i.GetIsAromatic(),
-                       # hybridization=atom_i.GetHybridization(),
-                       # num_h=atom_i.GetTotalNumHs(),
-                       #
-                       # # 5 more node features
-                       # ExplicitValence=atom_i.GetExplicitValence(),
-                       # FormalCharge=atom_i.GetFormalCharge(),
-                       # ImplicitValence=atom_i.GetImplicitValence(),
-                       # NumExplicitHs=atom_i.GetNumExplicitHs(),
-                       # NumRadicalElectrons=atom_i.GetNumRadicalElectrons(),
-                       )
 
-        for i in range(len(features)):
-            pass
+            """
+            atom_symbol: 原子符号
+            atom_id: 原子序号
+            is_aromatic: 是否芳香
+            hybridization: 杂化情况
+            FormalCharge: 形式电荷情况
+            IsInRing: 是否在环中
+            """
+            graph.add_node(
+                i,
+                atom_symbol=atom_i.GetSymbol(),
+                atom_id=atom_i.GetAtomicNum(),
+                is_aromatic=atom_i.GetIsAromatic(),
+                hybridization=atom_i.GetHybridization(),
+                num_h=atom_i.GetTotalNumHs(),
+                FormalCharge=atom_i.GetFormalCharge(),
+                IsInRing=atom_i.IsInRing(),
+                # acceptor=0,
+                # donor=0,
+                #
+                #
+                # # 5 more node features
+                # ExplicitValence=atom_i.GetExplicitValence(),
+                # ImplicitValence=atom_i.GetImplicitValence(),
+                # NumExplicitHs=atom_i.GetNumExplicitHs(),
+                # NumRadicalElectrons=atom_i.GetNumRadicalElectrons(),
+            )
 
+        # 连接边
         for i in range(mol.GetNumAtoms()):
-            pass
+            for j in range(mol.GetNumAtoms()):
+                e_ij = mol.GetBondBetweenAtoms(i, j)
+                if e_ij is not None:
+
+                    """
+                    bond_type: 键的类型
+                    IsConjugated: 是否共轭
+                    
+                    """
+                    graph.add_edge(
+                        i, j,
+                        bond_type=e_ij.GetBondType(),
+                        IsConjugated=int(e_ij.GetIsConjugated()),
+                    )
+
+
+    def get_nodes(self, graph):
+        pass
