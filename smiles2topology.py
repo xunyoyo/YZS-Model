@@ -132,6 +132,9 @@ class MyOwnDataset(InMemoryDataset):
         feature = []
 
         for node, feat in graph.nodes(data=True):
+            """
+            h_t: [[0,1,0,0,0,0],1,0,[0,0,0,1]]
+            """
             h_t = []
             # 元素符号作为标记加入特征
             h_t += [int(feat['atom_symbol']) for x in ['H', 'C', 'N', 'O', 'F', 'Cl', 'S', 'Br', 'I', 'P', '']]
@@ -166,3 +169,4 @@ class MyOwnDataset(InMemoryDataset):
 
         if len(edge) == 0:
             return torch.LongTensor([[0], [0]]), torch.FloatTensor([[0, 0, 0, 0, 0, 0]])
+
