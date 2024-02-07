@@ -144,6 +144,7 @@ class MyOwnDataset(InMemoryDataset):
                     ]
             h_t.append(feat['FormalCharge'])
             h_t.append(int(feat['IsInRing']))
+            feature.append((node, h_t))
 
         feature.sort(key=lambda item: item[0])
         node_attr = torch.FloatTensor([item[1] for item in feature])
@@ -153,10 +154,15 @@ class MyOwnDataset(InMemoryDataset):
     def get_edges(self, graph):
         edge = {}
         for u, v, feat in graph.edges(data=True):
-            e_t = []
-            e_t.append([int(feat['bond_type'] == x)
-                        for x in (Chem.rdchem.BondType.SINGLE,
-                                  Chem.rdchem.BondType.DOUBLE,
-                                  Chem.rdchem.BondType.TRIPLE,
-                                  Chem.rdchem.BondType.AROMATIC)
-                        ])
+            e_t=[int(feat['bond_type'] == x)
+                for x in (Chem.rdchem.BondType.SINGLE,
+                          Chem.rdchem.BondType.DOUBLE,
+                          Chem.rdchem.BondType.TRIPLE,
+                          Chem.rdchem.BondType.AROMATIC)
+                ]
+            e_t.append(int(feat['IsConjugated'] == False))
+            e_t.append(int(feat['IsConjugated'] == True))
+            edge[(u, v)] = e_t
+
+        if len(edge) == 0:
+            return torch.LongTensor([[0], [0]]), torch.FloatTensor([[0, 0, 0, 0, 0, 0]])
