@@ -123,6 +123,7 @@ class MyOwnDataset(InMemoryDataset):
             for j in range(mol.GetNumAtoms()):
                 e_ij = mol.GetBondBetweenAtoms(i, j)
                 if e_ij is not None:
+
                     """
                     bond_type: 键的类型
                     IsConjugated: 是否共轭
