@@ -3,6 +3,7 @@ By xunyoyo & kesmeey
 Part of code come from GitHub:
 https://github.com/ziduzidu/CSDTI
 """
+
 import pandas as pd
 import torch
 from torch_geometric.data import InMemoryDataset
@@ -32,7 +33,8 @@ class MyOwnDataset(InMemoryDataset):
     def download(self):
         pass
 
-    def pre_process(self, data_path, data_dict):
+    @staticmethod
+    def pre_process(data_path, data_dict):
         file = pd.read_csv(data_path)
 
         data_lists = []
@@ -55,10 +57,10 @@ class MyOwnDataset(InMemoryDataset):
                     edge_attr=edge_attr,
                     y=torch.FloatTensor([logS])
                 )
+
+                data_lists.append(data)
             except:
                 print("这个SMILE无法处理: ", smiles)
-
-            data_lists.append(data)
 
         return data_lists
 
@@ -140,7 +142,8 @@ class MyOwnDataset(InMemoryDataset):
 
         return node_attr, edge_index, edge_index2, edge_attr
 
-    def get_nodes(self, graph):
+    @staticmethod
+    def get_nodes(graph):
         feature = []
 
         for node, feat in graph.nodes(data=True):
@@ -163,7 +166,8 @@ class MyOwnDataset(InMemoryDataset):
 
         return node_attr
 
-    def get_edges(self, graph):
+    @staticmethod
+    def get_edges(graph):
         edge = {}
         for u, v, feat in graph.edges(data=True):
             e_t = [int(feat['bond_type'] == x)
@@ -172,8 +176,8 @@ class MyOwnDataset(InMemoryDataset):
                              Chem.rdchem.BondType.TRIPLE,
                              Chem.rdchem.BondType.AROMATIC)
                    ]
-            e_t.append(int(feat['IsConjugated'] == False))
-            e_t.append(int(feat['IsConjugated'] == True))
+            e_t.append(int(not feat['IsConjugated']))
+            e_t.append(int(feat['IsConjugated']))
             edge[(u, v)] = e_t
 
         if len(edge) == 0:
@@ -183,10 +187,11 @@ class MyOwnDataset(InMemoryDataset):
         edge_attr = torch.FloatTensor(list(edge.values()))
         return edge_index, edge_attr
 
-    def get_2hop(self, graph):
-        As = nx.adjacency_matrix(graph)
-        As = As.dot(As)
-        edge_index2 = torch.LongTensor(As.nonzero())
+    @staticmethod
+    def get_2hop(graph):
+        M = nx.adjacency_matrix(graph)
+        M = M.dot(M)
+        edge_index2 = torch.LongTensor(M.nonzero())
         return edge_index2
 
 
