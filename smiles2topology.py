@@ -39,8 +39,8 @@ class MyOwnDataset(InMemoryDataset):
 
         data_lists = []
         for index, row in file.iterrows():
-            smiles = row['isomeric_smiles']
-            logS = row['logS0']
+            smiles = row['SMILES']
+            logS = row['logS']
 
             x, edge_index, edge_index2, edge_attr = data_dict[smiles]
 
@@ -68,7 +68,7 @@ class MyOwnDataset(InMemoryDataset):
         file_train = pd.read_csv(self.raw_paths[0])
         file = file_train
 
-        smiles = file['isomeric_smiles'].unique()
+        smiles = file['SMILES'].unique()
         graph_dict = dict()
 
         for smile in tqdm(smiles, total=len(smiles)):
@@ -196,4 +196,7 @@ class MyOwnDataset(InMemoryDataset):
 
 
 if __name__ == "__main__":
-    MyOwnDataset('Datasets')
+    MyOwnDataset('Datasets/Lovric')
+    MyOwnDataset('Datasets/Delaney')
+    MyOwnDataset('Datasets/Ceasvlu')
+
