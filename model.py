@@ -1,3 +1,10 @@
+"""
+By xunyoyo & kesmeey
+Part of code come from GitHub:
+https://github.com/ziduzidu/CSDTI
+https://github.com/ltorres97/FS-CrossTR
+"""
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -30,7 +37,7 @@ class MYMODEL(torch.nn.Module):
         self.conv21 = GCNConv(dim * 2, dim)
         self.conv22 = GCNConv(dim * 2, dim)
 
-        self.lstm = LSTM(dim * 2, dim, 1)
+        self.lstm = LSTM(input_size=dim * 2, hidden_size=dim, num_layers=1, batch_first=True)
 
     def forward(self, data):
         x, edge_index = data.x, data.edge_index
@@ -46,6 +53,5 @@ class MYMODEL(torch.nn.Module):
 
         x12 = torch.cat((x1, x2), dim=1)
 
-        lstm_out = self.lstm(x12)
-
-
+        lstm_input = x12.unsqueeze(0)
+        lstm_out, (hn, cn) = self.lstm(lstm_input)
