@@ -8,13 +8,9 @@ https://github.com/ltorres97/FS-CrossTR
 import torch
 from torch import einsum
 import torch.nn as nn
-import torch.nn.functional as F
 from einops import rearrange
-from torch_geometric.nn import GINConv, global_add_pool, global_mean_pool, global_max_pool
 from torch_geometric.nn import GCNConv
 from torch.nn import LSTM
-
-from torch.nn.modules.batchnorm import _BatchNorm
 
 
 def exists(val):
@@ -139,8 +135,6 @@ class MYMODEL(torch.nn.Module):
             nn.Linear(dim * 2, 1)
         )
 
-
-
     def forward(self, data):
         x, edge_index = data.x, data.edge_index
         edge_index2 = data.edge_index2
@@ -163,6 +157,8 @@ class MYMODEL(torch.nn.Module):
         features = torch.squeeze(lstm_out)[:, -1]
 
         out = self.fc(features)
+
+        return out
 
 
 if __name__ == '__main__':
