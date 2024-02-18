@@ -58,7 +58,7 @@ class MyOwnDataset(InMemoryDataset):
                     edge_attr=edge_attr,
                     y=torch.FloatTensor([logS])
                 )
-
+                print(data.y)
                 data_lists.append(data)
             except:
                 print("这个SMILE无法处理: ", smiles)

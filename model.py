@@ -121,18 +121,18 @@ class MYMODEL(torch.nn.Module):
         self.lstm = LSTM(input_size=dim * 2, hidden_size=dim, num_layers=1, batch_first=True)
 
         self.fc = nn.Sequential(
-            nn.Linear(dim * 2, 1024),
+            nn.Linear(dim, 1024),
             nn.ReLU(),
-            nn.Dropout(),
+            nn.Dropout(dropout),
 
             nn.Linear(1024, 1024),
             nn.ReLU(),
-            nn.Dropout(),
+            nn.Dropout(dropout),
 
-            nn.Linear(1024, dim * 2),
+            nn.Linear(1024, dim),
             nn.ReLU(),
-            nn.Dropout(),
-            nn.Linear(dim * 2, 1)
+            nn.Dropout(dropout),
+            nn.Linear(dim, 1)
         )
 
     def forward(self, data):
@@ -154,7 +154,7 @@ class MYMODEL(torch.nn.Module):
 
         lstm_out, (hn, cn) = self.lstm(transformer_out)
 
-        features = torch.squeeze(lstm_out)[:, -1]
+        features = lstm_out[-1, -1, :]
 
         out = self.fc(features)
 
