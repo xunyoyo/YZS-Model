@@ -35,6 +35,7 @@ class MyOwnDataset(InMemoryDataset):
 
     @staticmethod
     def pre_process(data_path, data_dict):
+        ok = False
         file = pd.read_csv(data_path)
 
         data_lists = []
