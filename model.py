@@ -11,10 +11,7 @@ import torch.nn as nn
 from einops import rearrange
 from torch_geometric.nn import GCNConv
 from torch_geometric.nn import global_mean_pool
-import torch.nn.functional as F
 from torch.nn import LSTM
-
-from torch.nn.modules.batchnorm import _BatchNorm
 
 
 def exists(val):
@@ -93,7 +90,7 @@ class MSA(nn.Module):
 
 
 class Transformer(nn.Module):
-    def __init__(self, dim, depth=3, heads=5, dim_head=64, mlp_dim=1024, dropout=0.):
+    def __init__(self, dim, depth=3, heads=8, dim_head=32, mlp_dim=512, dropout=0.2):
         super().__init__()
         self.layers = nn.ModuleList([])
         self.norm = nn.LayerNorm(dim)
@@ -111,7 +108,7 @@ class Transformer(nn.Module):
 
 
 class MYMODEL(torch.nn.Module):
-    def __init__(self, num_features=17, dim=32, dropout=0.2):
+    def __init__(self, num_features=24, dim=48, dropout=0.2):
         super(MYMODEL, self).__init__()
 
         self.dropout = nn.Dropout(dropout)
@@ -129,18 +126,18 @@ class MYMODEL(torch.nn.Module):
         self.lstm = LSTM(input_size=dim * 2, hidden_size=dim, num_layers=1, batch_first=True)
 
         self.fc = nn.Sequential(
-            nn.Linear(dim, 1024),
+            nn.Linear(dim, 512),
             nn.ReLU(),
             nn.Dropout(dropout),
 
-            nn.Linear(1024, 1024),
+            nn.Linear(512, 1024),
             nn.ReLU(),
             nn.Dropout(dropout),
 
-            nn.Linear(1024, dim),
+            nn.Linear(1024, 512),
             nn.ReLU(),
             nn.Dropout(dropout),
-            nn.Linear(dim, 1)
+            nn.Linear(512, 1)
         )
 
     def forward(self, data):
@@ -163,7 +160,7 @@ class MYMODEL(torch.nn.Module):
 
         lstm_out, (hn, cn) = self.lstm(transformer_out)
 
-        lstm_out = lstm_out[-1,:,:]
+        lstm_out = lstm_out[-1, :, :]
 
         graph_features = global_mean_pool(lstm_out, batch)
 

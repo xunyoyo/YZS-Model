@@ -43,7 +43,7 @@ def main():
 
     train_set = MyOwnDataset(fpath, train=True)
 
-    train_loader = DataLoader(train_set, batch_size=32, shuffle=True, num_workers=4)
+    train_loader = DataLoader(train_set, batch_size=64, shuffle=True, num_workers=4)
 
     device = torch.device('cuda:0')
 
@@ -65,7 +65,7 @@ def main():
 
     sum = 0
 
-    for batch in tqdm(range(num_iter), total=len(num_iter)):
+    for batch in tqdm(range(num_iter), total=num_iter):
         if break_flag:
             break
 
@@ -78,8 +78,8 @@ def main():
             loss = criterion(pred.view(-1), data.y.view(-1))
 
             sum += loss.item()
-            if global_step % 100 == 0:
-                print(math.sqrt(sum / 100))
+            if global_step % 1000 == 0:
+                print(math.sqrt(sum / 1000))
                 sum = 0
 
 

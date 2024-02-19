@@ -63,7 +63,7 @@ class MyOwnDataset(InMemoryDataset):
                     edge_attr=edge_attr,
                     y=torch.FloatTensor([logS])
                 )
-                print(data.y)
+                # print(data.x)
                 data_lists.append(data)
             except:
                 print("这个SMILE无法处理: ", smiles)
@@ -114,6 +114,10 @@ class MyOwnDataset(InMemoryDataset):
             hybridization: 杂化情况
             FormalCharge: 形式电荷情况
             IsInRing: 是否在环中
+            ExplicitHs: 原子的显式氢原子的数量
+            ImplicitHs: 原子的隐式氢原子的总数
+            Mass: 原子的质量
+            ExplicitValence: 原子的显式价数
             """
             graph.add_node(
                 i,
@@ -124,6 +128,10 @@ class MyOwnDataset(InMemoryDataset):
                 num_h=atom_i.GetTotalNumHs(),
                 FormalCharge=atom_i.GetFormalCharge(),
                 IsInRing=atom_i.IsInRing(),
+                ExplicitHs=atom_i.GetNumExplicitHs(),
+                ImplicitHs=atom_i.GetNumImplicitHs(),
+                Mass=atom_i.GetMass(),
+                ExplicitValence=atom_i.GetExplicitValence()
             )
 
         # 连接边
@@ -135,11 +143,13 @@ class MyOwnDataset(InMemoryDataset):
                     """
                     bond_type: 键的类型
                     IsConjugated: 是否共轭
+                    IsAromatic: 是否芳香
                     """
                     graph.add_edge(
                         i, j,
                         bond_type=e_ij.GetBondType(),
                         IsConjugated=int(e_ij.GetIsConjugated()),
+                        IsAromatic=int(e_ij.GetIsAromatic())
                     )
 
         node_attr = self.get_nodes(graph)
@@ -155,7 +165,7 @@ class MyOwnDataset(InMemoryDataset):
         for node, feat in graph.nodes(data=True):
             h_t = []
             # 元素符号作为标记加入特征
-            h_t += [int(feat['atom_symbol'] == x) for x in ['H', 'C', 'N', 'O', 'F', 'Cl', 'S', 'Br', 'I', 'P']]
+            h_t += [int(feat['atom_symbol'] == x) for x in ['H', 'C', 'N', 'O', 'F', 'Cl', 'S', 'Br', 'I', 'P', 'Na', 'As', 'K']]
             h_t.append(feat['atom_id'])
             h_t.append(int(feat['is_aromatic']))
             h_t += [int(feat['hybridization'] == x)
@@ -165,6 +175,11 @@ class MyOwnDataset(InMemoryDataset):
                     ]
             h_t.append(feat['FormalCharge'])
             h_t.append(int(feat['IsInRing']))
+            h_t.append(feat['ExplicitHs'])
+            h_t.append(feat['ImplicitHs'])
+            h_t.append(feat['Mass'])
+            h_t.append(feat['ExplicitValence'])
+            print(h_t)
             feature.append((node, h_t))
 
         feature.sort(key=lambda item: item[0])
@@ -184,10 +199,12 @@ class MyOwnDataset(InMemoryDataset):
                    ]
             e_t.append(int(not feat['IsConjugated']))
             e_t.append(int(feat['IsConjugated']))
+            e_t.append(int(not feat['IsAromatic']))
+            e_t.append(int(feat['IsAromatic']))
             edge[(u, v)] = e_t
 
         if len(edge) == 0:
-            return torch.LongTensor([[0], [0]]), torch.FloatTensor([[0, 0, 0, 0, 0, 0]])
+            return torch.LongTensor([[0], [0]]), torch.FloatTensor([[0, 0, 0, 0, 0, 0, 0, 0]])
 
         edge_index = torch.LongTensor(list(edge.keys())).transpose(0, 1)
         edge_attr = torch.FloatTensor(list(edge.values()))
@@ -202,7 +219,7 @@ class MyOwnDataset(InMemoryDataset):
 
 
 if __name__ == "__main__":
-    MyOwnDataset('Datasets/Lovric')
-    MyOwnDataset('Datasets/Delaney')
+    # MyOwnDataset('Datasets/Lovric')
+    # MyOwnDataset('Datasets/Delaney')
     MyOwnDataset('Datasets/Ceasvlu')
 
