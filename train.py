@@ -11,6 +11,7 @@ import torch.optim as optim
 import torch
 import torch.nn as nn
 from torch_geometric.data import DataLoader
+import torch.nn.functional as F
 import argparse
 
 from smiles2topology import *
@@ -42,14 +43,14 @@ def main():
 
     train_set = MyOwnDataset(fpath, train=True)
 
-    train_loader = DataLoader(train_set, batch_size=10, shuffle=True, num_workers=2)
+    train_loader = DataLoader(train_set, batch_size=32, shuffle=True, num_workers=4)
 
     device = torch.device('cuda:0')
 
     model = MYMODEL().to(device)
 
     epochs = 3000
-    steps_per_epoch = 10
+    steps_per_epoch = 15
     num_iter = math.ceil((epochs * steps_per_epoch) / len(train_loader))
     break_flag = False
 
@@ -62,7 +63,9 @@ def main():
 
     model.train()
 
-    for i in range(num_iter):
+    sum = 0
+
+    for batch in tqdm(range(num_iter), total=len(num_iter)):
         if break_flag:
             break
 
@@ -74,9 +77,11 @@ def main():
 
             loss = criterion(pred.view(-1), data.y.view(-1))
 
-            if i % 100 == 0:
-                print("data:",data.y)
-                print("pred:",pred)
+            sum += loss.item()
+            if global_step % 100 == 0:
+                print(math.sqrt(sum / 100))
+                sum = 0
+
 
             optimizer.zero_grad()
             loss.backward()

@@ -10,7 +10,11 @@ from torch import einsum
 import torch.nn as nn
 from einops import rearrange
 from torch_geometric.nn import GCNConv
+from torch_geometric.nn import global_mean_pool
+import torch.nn.functional as F
 from torch.nn import LSTM
+
+from torch.nn.modules.batchnorm import _BatchNorm
 
 
 def exists(val):
@@ -19,6 +23,10 @@ def exists(val):
 
 def default(val, d):
     return val if exists(val) else d
+
+
+def split_batch(x, batch):
+    num_graphs = batch.max().item() + 1
 
 
 class Norm(nn.Module):
@@ -136,7 +144,7 @@ class MYMODEL(torch.nn.Module):
         )
 
     def forward(self, data):
-        x, edge_index = data.x, data.edge_index
+        x, edge_index, batch = data.x, data.edge_index, data.batch
         edge_index2 = data.edge_index2
 
         x1 = self.relu(self.conv11(x, edge_index))
@@ -150,13 +158,16 @@ class MYMODEL(torch.nn.Module):
         x12 = torch.cat((x1, x2), dim=1)
 
         transformer_input = x12.unsqueeze(0)
+
         transformer_out = self.transformer(transformer_input)
 
         lstm_out, (hn, cn) = self.lstm(transformer_out)
 
-        features = lstm_out[-1, -1, :]
+        lstm_out = lstm_out[-1,:,:]
 
-        out = self.fc(features)
+        graph_features = global_mean_pool(lstm_out, batch)
+
+        out = self.fc(graph_features)
 
         return out
 

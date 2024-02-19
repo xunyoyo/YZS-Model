@@ -22,6 +22,11 @@ class MyOwnDataset(InMemoryDataset):
         else:
             self.data, self.slices = torch.load(self.processed_paths[1])
 
+    # def __getitem__(self, idx):
+    #     for i in range(idx):
+    #         print(self.data[idx])
+    #     return self.data
+
     @property
     def raw_file_names(self):
         return ['data_train.csv']
