@@ -7,7 +7,6 @@ https://github.com/ziduzidu/CSDTI
 import os
 
 import numpy as np
-import torch.nn as nn
 from torch_geometric.data import DataLoader
 from sklearn.metrics import r2_score, mean_squared_error
 
@@ -15,7 +14,7 @@ from model import MYMODEL
 from smiles2topology import *
 
 
-def val(model, criterion, dataloader, device):
+def val(model, dataloader, device):
     model.eval()
 
     pred_list = []
@@ -34,7 +33,7 @@ def val(model, criterion, dataloader, device):
     pred = np.concatenate(pred_list, axis=0)
     label = np.concatenate(label_list, axis=0)
 
-    print(pred, label)
+    # print(pred, label)
     epoch_r2 = r2_score(label, pred)
     epoch_rmse = mean_squared_error(label, pred)
 
@@ -42,7 +41,6 @@ def val(model, criterion, dataloader, device):
 
 
 def main():
-
     params = dict(
         data_root="Datasets",
         save_dir="save",
@@ -62,9 +60,7 @@ def main():
     model = MYMODEL().to(device)
     model.load_state_dict(torch.load(os.path.join(save_dir, params.get("model_name"))))
 
-    criterion = nn.MSELoss()
-
-    rmse, r2 = val(model, criterion, test_loader, device)
+    rmse, r2 = val(model, test_loader, device)
 
     msg = f"Loss: {rmse:.4f}, R2: {r2:.4f}"
     print(msg)

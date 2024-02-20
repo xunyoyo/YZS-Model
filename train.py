@@ -84,13 +84,17 @@ def main():
         train_loss = 0.0
         train_preds = []
         train_targets = []
+
         for data in train_loader:
+
             data = data.to(device)
-            optimizer.zero_grad()
             pred = model(data)
             loss = criterion(pred.view(-1), data.y.view(-1))
+
+            optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+
             train_loss += loss.item() * data.num_graphs
             train_preds.extend(pred.view(-1).detach().cpu().numpy())
             train_targets.extend(data.y.view(-1).detach().cpu().numpy())
@@ -101,11 +105,13 @@ def main():
         val_loss = 0.0
         val_preds = []
         val_targets = []
+
         with torch.no_grad():
             for data in val_loader:
                 data = data.to(device)
                 pred = model(data)
                 loss = criterion(pred.view(-1), data.y.view(-1))
+
                 val_loss += loss.item() * data.num_graphs
                 val_preds.extend(pred.view(-1).detach().cpu().numpy())
                 val_targets.extend(data.y.view(-1).detach().cpu().numpy())

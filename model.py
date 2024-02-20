@@ -50,7 +50,9 @@ class FFN(nn.Module):
 class MSA(nn.Module):
     def __init__(self, dim, heads=5, dim_head=64, dropout=0.):
         super().__init__()
+
         inner_dim = dim_head * heads
+
         self.heads = heads
         self.scale = dim_head ** -0.5
 
@@ -88,8 +90,10 @@ class MSA(nn.Module):
 class Transformer(nn.Module):
     def __init__(self, dim, depth=5, heads=8, dim_head=24, mlp_dim=256, dropout=0.2):
         super().__init__()
+
         self.layers = nn.ModuleList([])
         self.norm = nn.LayerNorm(dim)
+
         for _ in range(depth):
             self.layers.append(nn.ModuleList([
                 Norm(dim, MSA(dim, heads=heads, dim_head=dim_head, dropout=dropout)),
@@ -151,13 +155,11 @@ class MYMODEL(torch.nn.Module):
         x12 = torch.cat((x1, x2), dim=1)
 
         transformer_input = x12.unsqueeze(0)
-
         transformer_out = self.transformer(transformer_input)
 
         lstm_out, (hn, cn) = self.lstm(transformer_out)
 
         lstm_out = lstm_out[-1, :, :]
-
         graph_features = global_mean_pool(lstm_out, batch)
 
         out = self.fc(graph_features)

@@ -22,11 +22,6 @@ class MyOwnDataset(InMemoryDataset):
         else:
             self.data, self.slices = torch.load(self.processed_paths[1])
 
-    # def __getitem__(self, idx):
-    #     for i in range(idx):
-    #         print(self.data[idx])
-    #     return self.data
-
     @property
     def raw_file_names(self):
         return ['data_train.csv']
@@ -40,7 +35,6 @@ class MyOwnDataset(InMemoryDataset):
 
     @staticmethod
     def pre_process(data_path, data_dict):
-        ok = False
         file = pd.read_csv(data_path)
 
         data_lists = []
@@ -63,7 +57,7 @@ class MyOwnDataset(InMemoryDataset):
                     edge_attr=edge_attr,
                     y=torch.FloatTensor([logS])
                 )
-                # print(data.x)
+
                 data_lists.append(data)
             except:
                 print("这个SMILE无法处理: ", smiles)
@@ -108,6 +102,7 @@ class MyOwnDataset(InMemoryDataset):
             atom_i = mol.GetAtomWithIdx(i)
 
             """
+            i: 原子下标
             atom_symbol: 原子符号
             atom_id: 原子序号
             is_aromatic: 是否芳香
@@ -141,6 +136,8 @@ class MyOwnDataset(InMemoryDataset):
                 if e_ij is not None:
 
                     """
+                    i: 键左边的原子下标
+                    j: 键右边的原子下标
                     bond_type: 键的类型
                     IsConjugated: 是否共轭
                     IsAromatic: 是否芳香
@@ -165,7 +162,8 @@ class MyOwnDataset(InMemoryDataset):
         for node, feat in graph.nodes(data=True):
             h_t = []
             # 元素符号作为标记加入特征
-            h_t += [int(feat['atom_symbol'] == x) for x in ['H', 'C', 'N', 'O', 'F', 'Cl', 'S', 'Br', 'I', 'P', 'Na', 'As', 'K']]
+            h_t += [int(feat['atom_symbol'] == x)
+                    for x in ['H', 'C', 'N', 'O', 'F', 'Cl', 'S', 'Br', 'I', 'P', 'Na', 'As', 'K']]
             h_t.append(feat['atom_id'])
             h_t.append(int(feat['is_aromatic']))
             h_t += [int(feat['hybridization'] == x)
@@ -179,7 +177,6 @@ class MyOwnDataset(InMemoryDataset):
             h_t.append(feat['ImplicitHs'])
             h_t.append(feat['Mass'])
             h_t.append(feat['ExplicitValence'])
-            print(h_t)
             feature.append((node, h_t))
 
         feature.sort(key=lambda item: item[0])
@@ -222,4 +219,3 @@ if __name__ == "__main__":
     # MyOwnDataset('Datasets/Lovric')
     MyOwnDataset('Datasets/Llinas2020')
     # MyOwnDataset('Datasets/Ceasvlu')
-
