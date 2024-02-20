@@ -6,12 +6,12 @@ https://github.com/ltorres97/FS-CrossTR
 """
 
 import torch
-from torch import einsum
 import torch.nn as nn
 from einops import rearrange
+from torch import einsum
+from torch.nn import LSTM
 from torch_geometric.nn import GCNConv
 from torch_geometric.nn import global_mean_pool
-from torch.nn import LSTM
 
 
 def exists(val):
@@ -20,10 +20,6 @@ def exists(val):
 
 def default(val, d):
     return val if exists(val) else d
-
-
-def split_batch(x, batch):
-    num_graphs = batch.max().item() + 1
 
 
 class Norm(nn.Module):
@@ -90,7 +86,7 @@ class MSA(nn.Module):
 
 
 class Transformer(nn.Module):
-    def __init__(self, dim, depth=3, heads=8, dim_head=32, mlp_dim=512, dropout=0.2):
+    def __init__(self, dim, depth=4, heads=10, dim_head=48, mlp_dim=512, dropout=0.2):
         super().__init__()
         self.layers = nn.ModuleList([])
         self.norm = nn.LayerNorm(dim)
