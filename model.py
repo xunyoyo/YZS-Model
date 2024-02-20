@@ -86,7 +86,7 @@ class MSA(nn.Module):
 
 
 class Transformer(nn.Module):
-    def __init__(self, dim, depth=4, heads=10, dim_head=48, mlp_dim=512, dropout=0.2):
+    def __init__(self, dim, depth=5, heads=8, dim_head=24, mlp_dim=256, dropout=0.2):
         super().__init__()
         self.layers = nn.ModuleList([])
         self.norm = nn.LayerNorm(dim)
@@ -122,18 +122,18 @@ class MYMODEL(torch.nn.Module):
         self.lstm = LSTM(input_size=dim * 2, hidden_size=dim, num_layers=1, batch_first=True)
 
         self.fc = nn.Sequential(
-            nn.Linear(dim, 512),
+            nn.Linear(dim, 256),
             nn.ReLU(),
             nn.Dropout(dropout),
 
-            nn.Linear(512, 1024),
+            nn.Linear(256, 512),
             nn.ReLU(),
             nn.Dropout(dropout),
 
-            nn.Linear(1024, 512),
+            nn.Linear(512, 256),
             nn.ReLU(),
             nn.Dropout(dropout),
-            nn.Linear(512, 1)
+            nn.Linear(256, 1)
         )
 
     def forward(self, data):

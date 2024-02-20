@@ -47,7 +47,7 @@ def main():
         data_root="Datasets",
         save_dir="save",
         dataset="Lovric",
-        model_name="Epoch 190-643, Train Loss_ 0.8100, Val Loss_ 1.0093, Train R2_ 0.8652, Val R2_ 0.7925.pt"
+        model_name="Epoch 249-643, Train Loss_ 0.8742, Val Loss_ 0.9914, Train R2_ 0.8440, Val R2_ 0.7865.pt"
     )
 
     save_dir = params.get("save_dir")
