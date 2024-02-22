@@ -52,13 +52,14 @@ def main():
 
     full_dataset = MyOwnDataset(fpath, train=True)
 
+
     train_size = int(0.9 * len(full_dataset))
     val_size = len(full_dataset) - train_size
 
     train_set, val_set = random_split(full_dataset, [train_size, val_size])
 
-    train_loader = DataLoader(train_set, batch_size=64, shuffle=True, num_workers=4)
-    val_loader = DataLoader(val_set, batch_size=64, shuffle=True, num_workers=4)
+    train_loader = DataLoader(train_set, batch_size=256, shuffle=True, num_workers=10)
+    val_loader = DataLoader(val_set, batch_size=256, shuffle=True, num_workers=10)
 
     device = torch.device('cuda:0')
 
@@ -76,7 +77,7 @@ def main():
 
     best_val_r2 = -float('inf')
     epochs_no_improve = 0
-    early_stop_epoch = 50
+    early_stop_epoch = 300
 
     for epoch in range(num_iter):
 
@@ -149,5 +150,10 @@ if __name__ == '__main__':
     log_dir = 'log'
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
+
+    log_dir = 'save'
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+
 
     main()

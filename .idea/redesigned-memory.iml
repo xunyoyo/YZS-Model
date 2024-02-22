@@ -5,4 +5,7 @@
     <orderEntry type="jdk" jdkName="new" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PackageRequirementsSettings">
+    <option name="requirementsPath" value="E:\redesigned-memory\requirements.txt" />
+  </component>
 </module>

@@ -72,7 +72,7 @@ class MSA(nn.Module):
         context = default(context, x)
 
         if kv_include_self:
-            context = torch.cat((x, context), dim=1)  # CA needs the cls token to exchange information
+            context = torch.cat((x, context), dim=1)
 
         qkv = (self.to_q(x), *self.to_kv(context).chunk(2, dim=-1))
         q, k, v = map(lambda t: rearrange(t, 'b n (h d) -> b h n d', h=h), qkv)
@@ -88,7 +88,7 @@ class MSA(nn.Module):
 
 
 class Transformer(nn.Module):
-    def __init__(self, dim, depth=5, heads=8, dim_head=24, mlp_dim=256, dropout=0.2):
+    def __init__(self, dim, depth=5, heads=8, dim_head=24, mlp_dim=128, dropout=0.1):
         super().__init__()
 
         self.layers = nn.ModuleList([])
@@ -108,7 +108,7 @@ class Transformer(nn.Module):
 
 
 class MYMODEL(torch.nn.Module):
-    def __init__(self, num_features=24, dim=48, dropout=0.2):
+    def __init__(self, num_features=24, dim=48, dropout=0.1, depth=0.5, heads=8, dim_head=24, mlp_dim=128):
         super(MYMODEL, self).__init__()
 
         self.dropout = nn.Dropout(dropout)
@@ -121,7 +121,7 @@ class MYMODEL(torch.nn.Module):
         self.conv21 = GCNConv(dim * 2, dim)
         self.conv22 = GCNConv(dim * 2, dim)
 
-        self.transformer = Transformer(dim * 2)
+        self.transformer = Transformer(dim * 2, depth, heads, dim_head, mlp_dim)
 
         self.lstm = LSTM(input_size=dim * 2, hidden_size=dim, num_layers=1, batch_first=True)
 

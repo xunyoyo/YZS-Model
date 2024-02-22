@@ -1,9 +1,16 @@
+"""
+By xunyoyo & kesmeey
+用处: 计算两个数据集相同分子的LogS0数据的一致化程度
+使用方法: 两个分子的数据集仅保留两列[SMILE,LogS0]即可
+"""
+
 import pandas as pd
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
+
 def main():
     # 读取两个CSV文件的前两列
-    df1 = pd.read_csv('data_train.csv', usecols=[0, 1], header=None)
+    df1 = pd.read_csv('1.csv', usecols=[0, 1], header=None)
     df2 = pd.read_csv('2.csv', usecols=[0, 1], header=None)
 
     # 重命名列以方便合并

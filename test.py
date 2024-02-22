@@ -35,7 +35,7 @@ def val(model, dataloader, device):
 
     # print(pred, label)
     epoch_r2 = r2_score(label, pred)
-    epoch_rmse = mean_squared_error(label, pred)
+    epoch_rmse = mean_squared_error(label, pred, squared=False)
 
     return epoch_rmse, epoch_r2
 
@@ -44,8 +44,8 @@ def main():
     params = dict(
         data_root="Datasets",
         save_dir="save",
-        dataset="Lovric",
-        model_name="Epoch 249-643, Train Loss_ 0.8742, Val Loss_ 0.9914, Train R2_ 0.8440, Val R2_ 0.7865.pt"
+        dataset="xunyoyotest",
+        model_name="Epoch 915-2572, Train Loss_ 0.7073, Val Loss_ 0.8587, Train R2_ 0.8973, Val R2_ 0.8485.pt"
     )
 
     save_dir = params.get("save_dir")
@@ -54,7 +54,7 @@ def main():
     fpath = os.path.join(data_root, DATASET)
 
     test_dataset = MyOwnDataset(fpath, train=True)
-    test_loader = DataLoader(test_dataset, batch_size=512, shuffle=True, num_workers=4)
+    test_loader = DataLoader(test_dataset, batch_size=128, shuffle=True, num_workers=4)
 
     device = torch.device('cuda:0')
     model = MYMODEL().to(device)

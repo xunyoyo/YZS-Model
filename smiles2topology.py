@@ -4,6 +4,8 @@ Part of code come from GitHub:
 https://github.com/ziduzidu/CSDTI
 """
 
+import os
+
 import pandas as pd
 import torch
 from torch_geometric.data import InMemoryDataset
@@ -39,8 +41,8 @@ class MyOwnDataset(InMemoryDataset):
 
         data_lists = []
         for index, row in file.iterrows():
-            smiles = row['smiles']
-            logS = row['y']
+            smiles = row['SMILES']
+            logS = row['LogS']
 
             x, edge_index, edge_index2, edge_attr = data_dict[smiles]
 
@@ -68,7 +70,7 @@ class MyOwnDataset(InMemoryDataset):
         file_train = pd.read_csv(self.raw_paths[0])
         file = file_train
 
-        smiles = file['smiles'].unique()
+        smiles = file['SMILES'].unique()
         graph_dict = dict()
 
         for smile in tqdm(smiles, total=len(smiles)):
@@ -216,6 +218,7 @@ class MyOwnDataset(InMemoryDataset):
 
 
 if __name__ == "__main__":
-    # MyOwnDataset('Datasets/Lovric')
-    MyOwnDataset('Datasets/Llinas2020')
-    # MyOwnDataset('Datasets/Ceasvlu')
+    # MyOwnDataset(os.path.join('Datasets','Lovric'))
+    # MyOwnDataset(os.path.join('Datasets', 'Llinas2020'))
+    # MyOwnDataset(os.path.join('Datasets', 'Ceasvlu'))
+    MyOwnDataset(os.path.join('Datasets', 'xunyoyotest'))
