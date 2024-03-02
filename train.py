@@ -7,7 +7,6 @@ https://github.com/ziduzidu/CSDTI
 import logging
 import math
 import datetime
-import os
 
 import torch.nn as nn
 import torch.optim as optim
@@ -58,8 +57,8 @@ def main():
 
     train_set, val_set = random_split(full_dataset, [train_size, val_size])
 
-    train_loader = DataLoader(train_set, batch_size=256, shuffle=True, num_workers=10)
-    val_loader = DataLoader(val_set, batch_size=256, shuffle=True, num_workers=10)
+    train_loader = DataLoader(train_set, batch_size=64, shuffle=True, num_workers=2)
+    val_loader = DataLoader(val_set, batch_size=264, shuffle=True, num_workers=2)
 
     device = torch.device('cuda:0')
 

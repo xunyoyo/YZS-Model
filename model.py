@@ -108,7 +108,7 @@ class Transformer(nn.Module):
 
 
 class MYMODEL(torch.nn.Module):
-    def __init__(self, num_features=24, dim=48, dropout=0.1, depth=0.5, heads=8, dim_head=24, mlp_dim=128):
+    def __init__(self, num_features=24, dim=70, dropout=0.305, depth=3, heads=6):
         super(MYMODEL, self).__init__()
 
         self.dropout = nn.Dropout(dropout)
@@ -121,7 +121,7 @@ class MYMODEL(torch.nn.Module):
         self.conv21 = GCNConv(dim * 2, dim)
         self.conv22 = GCNConv(dim * 2, dim)
 
-        self.transformer = Transformer(dim * 2, depth, heads, dim_head, mlp_dim)
+        self.transformer = Transformer(dim * 2, depth, heads, dim * 2, dim * 8)
 
         self.lstm = LSTM(input_size=dim * 2, hidden_size=dim, num_layers=1, batch_first=True)
 
