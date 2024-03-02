@@ -76,7 +76,6 @@ def main():
 
     best_val_r2 = -float('inf')
     epochs_no_improve = 0
-
     early_stop_epoch = 300
 
     for epoch in range(num_iter):
