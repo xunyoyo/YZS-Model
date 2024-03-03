@@ -13,6 +13,8 @@ def permutation_feature_importance(model, data_loader, num_features=24):
     #                                               "Epoch 23-643, Train Loss_ 1.4097, Val Loss_ 1.3560, Train R2_ 0.5915, Val R2_ 0.6253.pt")))
     model.eval()
 
+
+
     feature_importance = np.zeros(num_features)  # 初始化特征重要性数组
 
     with torch.no_grad():
