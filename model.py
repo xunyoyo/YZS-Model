@@ -108,7 +108,7 @@ class Transformer(nn.Module):
 
 
 class MYMODEL(torch.nn.Module):
-    def __init__(self, num_features=24, dim=70, dropout=0.305, depth=3, heads=6):
+    def __init__(self, num_features=24, dim=32, dropout=0.0005, depth=6, heads=8):
         super(MYMODEL, self).__init__()
 
         self.dropout = nn.Dropout(dropout)

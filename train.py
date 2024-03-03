@@ -38,7 +38,7 @@ def main():
         dataset="Ceasvlu",
         save_model=True,
         lr=0.0005,
-        batch_size=128,
+        batch_size=64,
         is_using_trained_data=False,
         model_name="Epoch 1-643, Train Loss_ 1.0191, Val Loss_ 1.0195, Train R2_ 0.7854, Val R2_ 0.7982.pt"
     )
