@@ -26,7 +26,7 @@ You can download the training and testing dataset from:
 + `smile2topology.py`: Convert .csv files to datasets.
 + `model.py`: The whole YZS-model.
 + `opti.py`: Using searching package to find the perfect parameters.
-+ `train.py`: 
++ `train.py`: Training the YZS-model.
 
 ## About
 
