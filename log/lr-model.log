@@ -1,0 +1,396 @@
+2024-02-23 13:54:26,290 - build_posterior_wrapper took 0.000589 seconds
+2024-02-23 13:54:26,290 - TPE using 0 trials
+2024-02-23 14:10:14,769 - {'lr': 0.8638523287872337},best_val_loss:【3.3351950785282747】
+2024-02-23 14:10:14,772 - build_posterior_wrapper took 0.000831 seconds
+2024-02-23 14:10:14,773 - TPE using 1/1 trials with best loss 3.335195
+2024-02-23 14:24:12,441 - {'lr': 0.3056268541673699},best_val_loss:【2.061483842645433】
+2024-02-23 14:24:12,444 - build_posterior_wrapper took 0.000766 seconds
+2024-02-23 14:24:12,447 - TPE using 2/2 trials with best loss 2.061484
+2024-02-23 14:35:35,459 - {'lr': 0.2997758923669385},best_val_loss:【2.2992799854370727】
+2024-02-23 14:35:35,462 - build_posterior_wrapper took 0.000786 seconds
+2024-02-23 14:35:35,462 - TPE using 3/3 trials with best loss 2.061484
+2024-02-23 14:42:52,664 - {'lr': 0.5606656977764531},best_val_loss:【2.6635347400247205】
+2024-02-23 14:42:52,667 - build_posterior_wrapper took 0.000723 seconds
+2024-02-23 14:42:52,667 - TPE using 4/4 trials with best loss 2.061484
+2024-02-23 14:57:45,860 - {'lr': 0.09393410044528326},best_val_loss:【2.185284612044618】
+2024-02-23 14:57:45,862 - build_posterior_wrapper took 0.000768 seconds
+2024-02-23 14:57:45,863 - TPE using 5/5 trials with best loss 2.061484
+2024-02-23 15:11:18,136 - {'lr': 0.6733062768616748},best_val_loss:【2.204526937863062】
+2024-02-23 15:11:18,140 - build_posterior_wrapper took 0.000905 seconds
+2024-02-23 15:11:18,140 - TPE using 6/6 trials with best loss 2.061484
+2024-02-23 15:37:16,663 - {'lr': 0.9495308844408525},best_val_loss:【2.319878462194316】
+2024-02-23 15:37:16,666 - build_posterior_wrapper took 0.000761 seconds
+2024-02-23 15:37:16,667 - TPE using 7/7 trials with best loss 2.061484
+2024-02-23 16:05:49,471 - {'lr': 0.9468580374954885},best_val_loss:【2.1259474993876597】
+2024-02-23 16:05:49,474 - build_posterior_wrapper took 0.000878 seconds
+2024-02-23 16:05:49,475 - TPE using 8/8 trials with best loss 2.061484
+2024-02-23 16:17:21,375 - {'lr': 0.2702287789173252},best_val_loss:【2.2801664070671386】
+2024-02-23 16:17:21,378 - build_posterior_wrapper took 0.000871 seconds
+2024-02-23 16:17:21,378 - TPE using 9/9 trials with best loss 2.061484
+2024-02-23 16:38:22,039 - {'lr': 0.595848202223763},best_val_loss:【2.2042177682716413】
+2024-02-23 16:38:22,042 - build_posterior_wrapper took 0.000876 seconds
+2024-02-23 16:38:22,042 - TPE using 10/10 trials with best loss 2.061484
+2024-02-23 16:52:42,964 - {'lr': 0.38217143013825666},best_val_loss:【2.1419163546576794】
+2024-02-23 16:52:42,967 - build_posterior_wrapper took 0.000860 seconds
+2024-02-23 16:52:42,968 - TPE using 11/11 trials with best loss 2.061484
+2024-02-23 17:04:01,690 - {'lr': 0.19144088472014748},best_val_loss:【2.1853067718324186】
+2024-02-23 17:04:01,693 - build_posterior_wrapper took 0.000882 seconds
+2024-02-23 17:04:01,693 - TPE using 12/12 trials with best loss 2.061484
+2024-02-23 17:32:34,030 - {'lr': 0.8252631985360286},best_val_loss:【2.1941812163946044】
+2024-02-23 17:32:34,034 - build_posterior_wrapper took 0.000907 seconds
+2024-02-23 17:32:34,034 - TPE using 13/13 trials with best loss 2.061484
+2024-02-23 17:36:24,865 - {'lr': 0.13872872607435988},best_val_loss:【2.386218269984474】
+2024-02-23 17:36:24,868 - build_posterior_wrapper took 0.000891 seconds
+2024-02-23 17:36:24,868 - TPE using 14/14 trials with best loss 2.061484
+2024-02-23 18:03:41,210 - {'lr': 0.8685417941821515},best_val_loss:【2.100399759681746】
+2024-02-23 18:03:41,213 - build_posterior_wrapper took 0.000912 seconds
+2024-02-23 18:03:41,213 - TPE using 15/15 trials with best loss 2.061484
+2024-02-23 18:10:25,759 - {'lr': 0.0861974427485186},best_val_loss:【2.1508273234864728】
+2024-02-23 18:10:25,763 - build_posterior_wrapper took 0.000877 seconds
+2024-02-23 18:10:25,763 - TPE using 16/16 trials with best loss 2.061484
+2024-02-23 18:28:39,249 - {'lr': 0.43458835026367837},best_val_loss:【2.2929106790000757】
+2024-02-23 18:28:39,252 - build_posterior_wrapper took 0.000890 seconds
+2024-02-23 18:28:39,253 - TPE using 17/17 trials with best loss 2.061484
+2024-02-23 18:49:45,149 - {'lr': 0.43929973437311154},best_val_loss:【2.222651227507799】
+2024-02-23 18:49:45,153 - build_posterior_wrapper took 0.000913 seconds
+2024-02-23 18:49:45,153 - TPE using 18/18 trials with best loss 2.061484
+2024-02-23 19:03:54,465 - {'lr': 0.16629503447469596},best_val_loss:【2.2397955140737933】
+2024-02-23 19:03:54,469 - build_posterior_wrapper took 0.000914 seconds
+2024-02-23 19:03:54,469 - TPE using 19/19 trials with best loss 2.061484
+2024-02-23 19:08:37,858 - {'lr': 0.7062085794675924},best_val_loss:【3.456925451060467】
+2024-02-23 19:08:37,861 - build_posterior_wrapper took 0.000872 seconds
+2024-02-23 19:08:37,862 - TPE using 20/20 trials with best loss 2.061484
+2024-02-23 19:14:24,591 - {'lr': 0.328805939607068},best_val_loss:【2.185362071280913】
+2024-02-23 19:14:24,595 - build_posterior_wrapper took 0.000860 seconds
+2024-02-23 19:14:24,595 - TPE using 21/21 trials with best loss 2.061484
+2024-02-23 19:18:54,311 - {'lr': 0.027040510988605992},best_val_loss:【2.179120222025127】
+2024-02-23 19:18:54,314 - build_posterior_wrapper took 0.000864 seconds
+2024-02-23 19:18:54,314 - TPE using 22/22 trials with best loss 2.061484
+2024-02-23 19:51:27,985 - {'lr': 0.7838748955871024},best_val_loss:【2.2846300984146586】
+2024-02-23 19:51:27,989 - build_posterior_wrapper took 0.000884 seconds
+2024-02-23 19:51:27,989 - TPE using 23/23 trials with best loss 2.061484
+2024-02-23 20:19:56,122 - {'lr': 0.5107236801369988},best_val_loss:【2.099158373463327】
+2024-02-23 20:19:56,125 - build_posterior_wrapper took 0.000870 seconds
+2024-02-23 20:19:56,126 - TPE using 24/24 trials with best loss 2.061484
+2024-02-23 20:41:32,779 - {'lr': 0.5203855427665258},best_val_loss:【2.168119793279753】
+2024-02-23 20:41:32,782 - build_posterior_wrapper took 0.000867 seconds
+2024-02-23 20:41:32,783 - TPE using 25/25 trials with best loss 2.061484
+2024-02-23 21:02:41,960 - {'lr': 0.2411942048845144},best_val_loss:【2.0883415155741654】
+2024-02-23 21:02:41,963 - build_posterior_wrapper took 0.000854 seconds
+2024-02-23 21:02:41,963 - TPE using 26/26 trials with best loss 2.061484
+2024-02-23 21:16:51,000 - {'lr': 0.23214298954571838},best_val_loss:【2.0406164321532256】
+2024-02-23 21:16:51,003 - build_posterior_wrapper took 0.000877 seconds
+2024-02-23 21:16:51,004 - TPE using 27/27 trials with best loss 2.040616
+2024-02-23 21:24:48,442 - {'lr': 0.017693199242218127},best_val_loss:【2.257025381684263】
+2024-02-23 21:24:48,445 - build_posterior_wrapper took 0.000863 seconds
+2024-02-23 21:24:48,445 - TPE using 28/28 trials with best loss 2.040616
+2024-02-23 21:27:34,969 - {'lr': 0.3470070063913975},best_val_loss:【2.920579380682805】
+2024-02-23 21:27:34,972 - build_posterior_wrapper took 0.000862 seconds
+2024-02-23 21:27:34,973 - TPE using 29/29 trials with best loss 2.040616
+2024-02-23 21:47:32,455 - {'lr': 0.22227883746368748},best_val_loss:【2.2740249551192706】
+2024-02-23 21:47:32,458 - build_posterior_wrapper took 0.000867 seconds
+2024-02-23 21:47:32,459 - TPE using 30/30 trials with best loss 2.040616
+2024-02-23 22:11:48,711 - {'lr': 0.42758677590404714},best_val_loss:【2.2295049587162374】
+2024-02-23 22:11:48,714 - build_posterior_wrapper took 0.000870 seconds
+2024-02-23 22:11:48,714 - TPE using 31/31 trials with best loss 2.040616
+2024-02-23 22:24:42,711 - {'lr': 0.10459702372853497},best_val_loss:【2.1627272440042367】
+2024-02-23 22:24:42,715 - build_posterior_wrapper took 0.000715 seconds
+2024-02-23 22:24:42,715 - TPE using 32/32 trials with best loss 2.040616
+2024-02-23 22:43:20,590 - {'lr': 0.6077944026124933},best_val_loss:【2.660834022617392】
+2024-02-23 22:43:20,594 - build_posterior_wrapper took 0.000869 seconds
+2024-02-23 22:43:20,594 - TPE using 33/33 trials with best loss 2.040616
+2024-02-23 23:06:58,196 - {'lr': 0.30472975327923446},best_val_loss:【2.11721755979063】
+2024-02-23 23:06:58,200 - build_posterior_wrapper took 0.000895 seconds
+2024-02-23 23:06:58,200 - TPE using 34/34 trials with best loss 2.040616
+2024-02-23 23:09:19,414 - {'lr': 0.3716108417042666},best_val_loss:【inf】
+2024-02-23 23:09:19,417 - build_posterior_wrapper took 0.000717 seconds
+2024-02-23 23:09:19,418 - TPE using 35/35 trials with best loss 2.040616
+2024-02-23 23:12:33,642 - {'lr': 0.003694632223789851},best_val_loss:【2.1709470860488573】
+2024-02-23 23:12:33,645 - build_posterior_wrapper took 0.000861 seconds
+2024-02-23 23:12:33,645 - TPE using 36/36 trials with best loss 2.040616
+2024-02-23 23:29:24,936 - {'lr': 0.27895456979985456},best_val_loss:【2.268418579574895】
+2024-02-23 23:29:24,939 - build_posterior_wrapper took 0.000866 seconds
+2024-02-23 23:29:24,939 - TPE using 37/37 trials with best loss 2.040616
+2024-02-23 23:34:42,261 - {'lr': 0.07381083656040208},best_val_loss:【2.202897574497466】
+2024-02-23 23:34:42,265 - build_posterior_wrapper took 0.000881 seconds
+2024-02-23 23:34:42,265 - TPE using 38/38 trials with best loss 2.040616
+2024-02-23 23:58:40,195 - {'lr': 0.47709705687965165},best_val_loss:【2.168704719397244】
+2024-02-23 23:58:40,198 - build_posterior_wrapper took 0.000864 seconds
+2024-02-23 23:58:40,199 - TPE using 39/39 trials with best loss 2.040616
+2024-02-24 00:10:49,217 - {'lr': 0.21507347305113225},best_val_loss:【2.133859488761837】
+2024-02-24 00:10:49,220 - build_posterior_wrapper took 0.000759 seconds
+2024-02-24 00:10:49,220 - TPE using 40/40 trials with best loss 2.040616
+2024-02-24 00:34:31,186 - {'lr': 0.6779322100059368},best_val_loss:【2.1617378895527706】
+2024-02-24 00:34:31,189 - build_posterior_wrapper took 0.000826 seconds
+2024-02-24 00:34:31,190 - TPE using 41/41 trials with best loss 2.040616
+2024-02-24 01:01:00,263 - {'lr': 0.5926607559119159},best_val_loss:【2.214239835218565】
+2024-02-24 01:01:00,265 - build_posterior_wrapper took 0.000690 seconds
+2024-02-24 01:01:00,266 - TPE using 42/42 trials with best loss 2.040616
+2024-02-24 01:10:44,166 - {'lr': 0.1463047688438651},best_val_loss:【2.1499265845031417】
+2024-02-24 01:10:44,169 - build_posterior_wrapper took 0.000842 seconds
+2024-02-24 01:10:44,169 - TPE using 43/43 trials with best loss 2.040616
+2024-02-24 01:25:57,267 - {'lr': 0.2619804758085322},best_val_loss:【2.1565914672397026】
+2024-02-24 01:25:57,271 - build_posterior_wrapper took 0.000848 seconds
+2024-02-24 01:25:57,271 - TPE using 44/44 trials with best loss 2.040616
+2024-02-24 01:43:50,715 - {'lr': 0.4097878800359432},best_val_loss:【2.211333085396107】
+2024-02-24 01:43:50,718 - build_posterior_wrapper took 0.000738 seconds
+2024-02-24 01:43:50,718 - TPE using 45/45 trials with best loss 2.040616
+2024-02-24 01:53:42,326 - {'lr': 0.9944585401711559},best_val_loss:【6.13176134228968】
+2024-02-24 01:53:42,329 - build_posterior_wrapper took 0.000841 seconds
+2024-02-24 01:53:42,330 - TPE using 46/46 trials with best loss 2.040616
+2024-02-24 01:56:03,991 - {'lr': 0.19245080659957153},best_val_loss:【2.8083209162841647】
+2024-02-24 01:56:03,994 - build_posterior_wrapper took 0.000716 seconds
+2024-02-24 01:56:03,994 - TPE using 47/47 trials with best loss 2.040616
+2024-02-24 02:00:34,422 - {'lr': 0.05970628031600067},best_val_loss:【2.273303671087151】
+2024-02-24 02:00:34,425 - build_posterior_wrapper took 0.000754 seconds
+2024-02-24 02:00:34,426 - TPE using 48/48 trials with best loss 2.040616
+2024-02-24 02:20:42,336 - {'lr': 0.315239301937728},best_val_loss:【2.345142376367027】
+2024-02-24 02:20:42,339 - build_posterior_wrapper took 0.000830 seconds
+2024-02-24 02:20:42,340 - TPE using 49/49 trials with best loss 2.040616
+2024-02-24 02:40:36,557 - {'lr': 0.4693854058040066},best_val_loss:【2.19709091189511】
+2024-02-24 02:40:36,560 - build_posterior_wrapper took 0.000848 seconds
+2024-02-24 02:40:36,561 - TPE using 50/50 trials with best loss 2.040616
+2024-02-24 02:53:31,176 - {'lr': 0.3578319645778683},best_val_loss:【2.3164596629429437】
+2024-02-24 02:53:31,179 - build_posterior_wrapper took 0.000762 seconds
+2024-02-24 02:53:31,179 - TPE using 51/51 trials with best loss 2.040616
+2024-02-24 03:13:19,032 - {'lr': 0.5439540918632302},best_val_loss:【2.111729819601955】
+2024-02-24 03:13:19,035 - build_posterior_wrapper took 0.000865 seconds
+2024-02-24 03:13:19,036 - TPE using 52/52 trials with best loss 2.040616
+2024-02-24 03:36:12,449 - {'lr': 0.7571045184751816},best_val_loss:【2.1604478241489047】
+2024-02-24 03:36:12,453 - build_posterior_wrapper took 0.000930 seconds
+2024-02-24 03:36:12,453 - TPE using 53/53 trials with best loss 2.040616
+2024-02-24 03:39:48,178 - {'lr': 0.6404190310199924},best_val_loss:【4.3298013448661585】
+2024-02-24 03:39:48,181 - build_posterior_wrapper took 0.000865 seconds
+2024-02-24 03:39:48,181 - TPE using 54/54 trials with best loss 2.040616
+2024-02-24 03:43:28,153 - build_posterior_wrapper took 0.000618 seconds
+2024-02-24 03:43:28,153 - TPE using 0 trials
+2024-02-24 03:47:22,862 - {'lr': 0.05477759554072829},best_val_loss:【2.37579355030319】
+2024-02-24 03:47:22,867 - build_posterior_wrapper took 0.000920 seconds
+2024-02-24 03:47:22,867 - TPE using 1/1 trials with best loss 2.375794
+2024-02-24 03:56:31,356 - {'lr': 0.06782263661234914},best_val_loss:【2.1800669936486967】
+2024-02-24 03:56:31,359 - build_posterior_wrapper took 0.000882 seconds
+2024-02-24 03:56:31,359 - TPE using 2/2 trials with best loss 2.180067
+2024-02-24 03:58:58,170 - {'lr': 0.053241976996976956},best_val_loss:【2.3273983168930026】
+2024-02-24 03:58:58,173 - build_posterior_wrapper took 0.000887 seconds
+2024-02-24 03:58:58,174 - TPE using 3/3 trials with best loss 2.180067
+2024-02-24 04:03:12,213 - {'lr': 0.09872634905934312},best_val_loss:【2.21372618866429】
+2024-02-24 04:03:12,216 - build_posterior_wrapper took 0.000889 seconds
+2024-02-24 04:03:12,216 - TPE using 4/4 trials with best loss 2.180067
+2024-02-24 04:08:38,911 - {'lr': 0.017187732438090648},best_val_loss:【2.202774919500525】
+2024-02-24 04:08:38,914 - build_posterior_wrapper took 0.000891 seconds
+2024-02-24 04:08:38,915 - TPE using 5/5 trials with best loss 2.180067
+2024-02-24 04:16:31,047 - {'lr': 0.09484055049480003},best_val_loss:【2.1779003916689974】
+2024-02-24 04:16:31,050 - build_posterior_wrapper took 0.000783 seconds
+2024-02-24 04:16:31,050 - TPE using 6/6 trials with best loss 2.177900
+2024-02-24 04:23:14,230 - {'lr': 0.003395079599408263},best_val_loss:【2.2372359493895213】
+2024-02-24 04:23:14,233 - build_posterior_wrapper took 0.000911 seconds
+2024-02-24 04:23:14,233 - TPE using 7/7 trials with best loss 2.177900
+2024-02-24 04:31:58,713 - {'lr': 0.0011906622029182086},best_val_loss:【2.277529514948177】
+2024-02-24 04:31:58,716 - build_posterior_wrapper took 0.000883 seconds
+2024-02-24 04:31:58,716 - TPE using 8/8 trials with best loss 2.177900
+2024-02-24 04:43:37,311 - {'lr': 0.07698756472850832},best_val_loss:【2.104451484686404】
+2024-02-24 04:43:37,314 - build_posterior_wrapper took 0.000798 seconds
+2024-02-24 04:43:37,314 - TPE using 9/9 trials with best loss 2.104451
+2024-02-24 04:51:20,909 - {'lr': 0.0980868448756912},best_val_loss:【2.0771408219813887】
+2024-02-24 04:51:20,912 - build_posterior_wrapper took 0.000915 seconds
+2024-02-24 04:51:20,913 - TPE using 10/10 trials with best loss 2.077141
+2024-02-24 04:58:04,952 - {'lr': 0.09303353055448292},best_val_loss:【2.210036378737703】
+2024-02-24 04:58:04,955 - build_posterior_wrapper took 0.000884 seconds
+2024-02-24 04:58:04,955 - TPE using 11/11 trials with best loss 2.077141
+2024-02-24 05:02:58,372 - {'lr': 0.050069321661993696},best_val_loss:【2.2329295276400645】
+2024-02-24 05:02:58,375 - build_posterior_wrapper took 0.000908 seconds
+2024-02-24 05:02:58,376 - TPE using 12/12 trials with best loss 2.077141
+2024-02-24 05:08:16,130 - {'lr': 0.05645055155072925},best_val_loss:【2.1821128359672】
+2024-02-24 05:08:16,133 - build_posterior_wrapper took 0.000901 seconds
+2024-02-24 05:08:16,133 - TPE using 13/13 trials with best loss 2.077141
+2024-02-24 05:13:57,720 - {'lr': 0.043202837799399735},best_val_loss:【2.138236211619752】
+2024-02-24 05:13:57,723 - build_posterior_wrapper took 0.000718 seconds
+2024-02-24 05:13:57,723 - TPE using 14/14 trials with best loss 2.077141
+2024-02-24 05:31:12,062 - {'lr': 0.0757761111835104},best_val_loss:【2.2437136763936705】
+2024-02-24 05:31:12,066 - build_posterior_wrapper took 0.000892 seconds
+2024-02-24 05:31:12,066 - TPE using 15/15 trials with best loss 2.077141
+2024-02-24 05:33:53,535 - {'lr': 0.09690441914604751},best_val_loss:【2.116738701827045】
+2024-02-24 05:33:53,538 - build_posterior_wrapper took 0.000784 seconds
+2024-02-24 05:33:53,539 - TPE using 16/16 trials with best loss 2.077141
+2024-02-24 05:46:52,264 - {'lr': 0.04999202472000597},best_val_loss:【2.1682366271930773】
+2024-02-24 05:46:52,267 - build_posterior_wrapper took 0.000896 seconds
+2024-02-24 05:46:52,267 - TPE using 17/17 trials with best loss 2.077141
+2024-02-24 05:51:58,808 - {'lr': 0.08921973952230924},best_val_loss:【2.202684537091197】
+2024-02-24 05:51:58,811 - build_posterior_wrapper took 0.000898 seconds
+2024-02-24 05:51:58,811 - TPE using 18/18 trials with best loss 2.077141
+2024-02-24 05:58:38,572 - {'lr': 0.0596504438525922},best_val_loss:【2.247853831481643】
+2024-02-24 05:58:38,576 - build_posterior_wrapper took 0.000937 seconds
+2024-02-24 05:58:38,576 - TPE using 19/19 trials with best loss 2.077141
+2024-02-24 06:03:08,127 - {'lr': 0.03137735630462575},best_val_loss:【2.232872470376444】
+2024-02-24 06:03:08,130 - build_posterior_wrapper took 0.000899 seconds
+2024-02-24 06:03:08,131 - TPE using 20/20 trials with best loss 2.077141
+2024-02-24 06:06:53,021 - {'lr': 0.08297037196851864},best_val_loss:【2.1833677670541625】
+2024-02-24 06:06:53,024 - build_posterior_wrapper took 0.000746 seconds
+2024-02-24 06:06:53,024 - TPE using 21/21 trials with best loss 2.077141
+2024-02-24 06:15:35,943 - {'lr': 0.07603747427644095},best_val_loss:【2.3003707343375446】
+2024-02-24 06:15:35,946 - build_posterior_wrapper took 0.000769 seconds
+2024-02-24 06:15:35,946 - TPE using 22/22 trials with best loss 2.077141
+2024-02-24 06:20:35,071 - {'lr': 0.0820757657405916},best_val_loss:【2.2116621443844897】
+2024-02-24 06:20:35,074 - build_posterior_wrapper took 0.000852 seconds
+2024-02-24 06:20:35,074 - TPE using 23/23 trials with best loss 2.077141
+2024-02-24 06:27:02,219 - {'lr': 0.07355579726615266},best_val_loss:【2.22821505883582】
+2024-02-24 06:27:02,222 - build_posterior_wrapper took 0.000859 seconds
+2024-02-24 06:27:02,222 - TPE using 24/24 trials with best loss 2.077141
+2024-02-24 06:34:41,814 - {'lr': 0.06713865246505309},best_val_loss:【2.149152670728303】
+2024-02-24 06:34:41,818 - build_posterior_wrapper took 0.000909 seconds
+2024-02-24 06:34:41,819 - TPE using 25/25 trials with best loss 2.077141
+2024-02-24 06:41:27,776 - {'lr': 0.08596312329264202},best_val_loss:【2.2053893172203303】
+2024-02-24 06:41:27,779 - build_posterior_wrapper took 0.000847 seconds
+2024-02-24 06:41:27,779 - TPE using 26/26 trials with best loss 2.077141
+2024-02-24 06:47:34,535 - {'lr': 0.03838122875160336},best_val_loss:【2.2210249168657166】
+2024-02-24 06:47:34,538 - build_posterior_wrapper took 0.000759 seconds
+2024-02-24 06:47:34,538 - TPE using 27/27 trials with best loss 2.077141
+2024-02-24 06:57:21,902 - {'lr': 0.06419634337842196},best_val_loss:【2.289522999404161】
+2024-02-24 06:57:21,906 - build_posterior_wrapper took 0.001093 seconds
+2024-02-24 06:57:21,906 - TPE using 28/28 trials with best loss 2.077141
+2024-02-24 07:05:11,813 - {'lr': 0.09980016562690362},best_val_loss:【2.169112226269898】
+2024-02-24 07:05:11,816 - build_posterior_wrapper took 0.000736 seconds
+2024-02-24 07:05:11,816 - TPE using 29/29 trials with best loss 2.077141
+2024-02-24 07:07:59,393 - build_posterior_wrapper took 0.000639 seconds
+2024-02-24 07:07:59,393 - TPE using 0 trials
+2024-02-24 07:13:09,173 - {'lr': 0.0012325626428426784},best_val_loss:【1.9549184498317649】
+2024-02-24 07:13:09,177 - build_posterior_wrapper took 0.000906 seconds
+2024-02-24 07:13:09,178 - TPE using 1/1 trials with best loss 1.954918
+2024-02-24 07:15:31,135 - {'lr': 0.00806499867833326},best_val_loss:【2.223458499402658】
+2024-02-24 07:15:31,138 - build_posterior_wrapper took 0.000859 seconds
+2024-02-24 07:15:31,139 - TPE using 2/2 trials with best loss 1.954918
+2024-02-24 07:18:51,215 - {'lr': 0.008084868686869803},best_val_loss:【2.2584793501887344】
+2024-02-24 07:18:51,218 - build_posterior_wrapper took 0.000865 seconds
+2024-02-24 07:18:51,218 - TPE using 3/3 trials with best loss 1.954918
+2024-02-24 07:21:59,403 - {'lr': 0.003290076901457963},best_val_loss:【2.264609129852184】
+2024-02-24 07:21:59,405 - build_posterior_wrapper took 0.000764 seconds
+2024-02-24 07:21:59,406 - TPE using 4/4 trials with best loss 1.954918
+2024-02-24 07:24:32,761 - {'lr': 0.0023160615885435406},best_val_loss:【2.179437232257473】
+2024-02-24 07:24:32,764 - build_posterior_wrapper took 0.001105 seconds
+2024-02-24 07:24:32,765 - TPE using 5/5 trials with best loss 1.954918
+2024-02-24 07:47:18,318 - {'lr': 3.7202371515171295e-05},best_val_loss:【1.5018481739364096】
+2024-02-24 07:47:18,321 - build_posterior_wrapper took 0.000874 seconds
+2024-02-24 07:47:18,322 - TPE using 6/6 trials with best loss 1.501848
+2024-02-24 07:49:56,658 - {'lr': 0.006924081155892936},best_val_loss:【2.2053403220347927】
+2024-02-24 07:49:56,661 - build_posterior_wrapper took 0.000883 seconds
+2024-02-24 07:49:56,662 - TPE using 7/7 trials with best loss 1.501848
+2024-02-24 07:56:02,776 - {'lr': 0.0025809666730023805},best_val_loss:【2.193194359283426】
+2024-02-24 07:56:02,779 - build_posterior_wrapper took 0.000902 seconds
+2024-02-24 07:56:02,780 - TPE using 8/8 trials with best loss 1.501848
+2024-02-24 08:06:48,577 - {'lr': 0.0007286643362567883},best_val_loss:【2.0431695832487153】
+2024-02-24 08:06:48,580 - build_posterior_wrapper took 0.000885 seconds
+2024-02-24 08:06:48,581 - TPE using 9/9 trials with best loss 1.501848
+2024-02-24 08:10:03,905 - {'lr': 0.00693690707690396},best_val_loss:【2.249259493967678】
+2024-02-24 08:10:03,909 - build_posterior_wrapper took 0.000891 seconds
+2024-02-24 08:10:03,910 - TPE using 10/10 trials with best loss 1.501848
+2024-02-24 08:17:10,915 - {'lr': 0.009241646280720932},best_val_loss:【2.211305039013041】
+2024-02-24 08:17:10,917 - build_posterior_wrapper took 0.000752 seconds
+2024-02-24 08:17:10,918 - TPE using 11/11 trials with best loss 1.501848
+2024-02-24 08:21:01,118 - {'lr': 0.0017893315989994925},best_val_loss:【2.2644872548615833】
+2024-02-24 08:21:01,121 - build_posterior_wrapper took 0.000868 seconds
+2024-02-24 08:21:01,122 - TPE using 12/12 trials with best loss 1.501848
+2024-02-24 08:24:14,594 - {'lr': 0.0013744854812719972},best_val_loss:【2.1811334003878278】
+2024-02-24 08:24:14,597 - build_posterior_wrapper took 0.000912 seconds
+2024-02-24 08:24:14,597 - TPE using 13/13 trials with best loss 1.501848
+2024-02-24 08:31:46,007 - {'lr': 0.0078179360296418},best_val_loss:【2.302183456231092】
+2024-02-24 08:31:46,011 - build_posterior_wrapper took 0.000873 seconds
+2024-02-24 08:31:46,011 - TPE using 14/14 trials with best loss 1.501848
+2024-02-24 08:36:37,468 - {'lr': 0.001940251609225767},best_val_loss:【2.289473499294441】
+2024-02-24 08:36:37,471 - build_posterior_wrapper took 0.000863 seconds
+2024-02-24 08:36:37,471 - TPE using 15/15 trials with best loss 1.501848
+2024-02-24 08:51:27,947 - {'lr': 0.0006611879438733608},best_val_loss:【1.1576915345895555】
+2024-02-24 08:51:27,951 - build_posterior_wrapper took 0.000854 seconds
+2024-02-24 08:51:27,952 - TPE using 16/16 trials with best loss 1.157692
+2024-02-24 08:54:50,844 - {'lr': 0.0027662835007708614},best_val_loss:【2.2639452526244455】
+2024-02-24 08:54:50,847 - build_posterior_wrapper took 0.000849 seconds
+2024-02-24 08:54:50,848 - TPE using 17/17 trials with best loss 1.157692
+2024-02-24 08:59:36,133 - {'lr': 0.00367954415743915},best_val_loss:【2.1464436351864125】
+2024-02-24 08:59:36,136 - build_posterior_wrapper took 0.000856 seconds
+2024-02-24 08:59:36,136 - TPE using 18/18 trials with best loss 1.157692
+2024-02-24 09:02:57,218 - {'lr': 0.0021152726396850797},best_val_loss:【2.148971212554139】
+2024-02-24 09:02:57,221 - build_posterior_wrapper took 0.001461 seconds
+2024-02-24 09:02:57,222 - TPE using 19/19 trials with best loss 1.157692
+2024-02-24 09:08:47,738 - {'lr': 0.0062989883810673575},best_val_loss:【2.2775181369844084】
+2024-02-24 09:08:47,741 - build_posterior_wrapper took 0.000863 seconds
+2024-02-24 09:08:47,742 - TPE using 20/20 trials with best loss 1.157692
+2024-02-24 09:42:47,022 - {'lr': 1.4212777177209309e-05},best_val_loss:【1.3684310954550896】
+2024-02-24 09:42:47,025 - build_posterior_wrapper took 0.000860 seconds
+2024-02-24 09:42:47,025 - TPE using 21/21 trials with best loss 1.157692
+2024-02-24 09:46:19,940 - {'lr': 0.004691308331840729},best_val_loss:【2.171993894161246】
+2024-02-24 09:46:19,943 - build_posterior_wrapper took 0.000742 seconds
+2024-02-24 09:46:19,943 - TPE using 22/22 trials with best loss 1.157692
+2024-02-24 10:14:11,840 - {'lr': 2.492550491982543e-05},best_val_loss:【1.2262896311883786】
+2024-02-24 10:14:11,843 - build_posterior_wrapper took 0.000800 seconds
+2024-02-24 10:14:11,843 - TPE using 23/23 trials with best loss 1.157692
+2024-02-24 10:32:54,163 - {'lr': 0.0005177737030666245},best_val_loss:【1.232804972789777】
+2024-02-24 10:32:54,166 - build_posterior_wrapper took 0.000816 seconds
+2024-02-24 10:32:54,167 - TPE using 24/24 trials with best loss 1.157692
+2024-02-24 10:35:45,338 - {'lr': 0.0050394050339690275},best_val_loss:【2.12611578216727】
+2024-02-24 10:35:45,342 - build_posterior_wrapper took 0.000824 seconds
+2024-02-24 10:35:45,342 - TPE using 25/25 trials with best loss 1.157692
+2024-02-24 10:40:07,978 - {'lr': 0.004591038900952941},best_val_loss:【2.2505658488783067】
+2024-02-24 10:40:07,981 - build_posterior_wrapper took 0.000757 seconds
+2024-02-24 10:40:07,982 - TPE using 26/26 trials with best loss 1.157692
+2024-02-24 11:22:57,116 - {'lr': 1.2031229657689154e-05},best_val_loss:【1.3325048727787125】
+2024-02-24 11:22:57,118 - build_posterior_wrapper took 0.000741 seconds
+2024-02-24 11:22:57,119 - TPE using 27/27 trials with best loss 1.157692
+2024-02-24 11:41:50,836 - {'lr': 0.0008657526708826465},best_val_loss:【1.3010773432355864】
+2024-02-24 11:41:50,839 - build_posterior_wrapper took 0.000826 seconds
+2024-02-24 11:41:50,840 - TPE using 28/28 trials with best loss 1.157692
+2024-02-24 11:45:54,831 - {'lr': 0.003714089732528227},best_val_loss:【2.2109593854988376】
+2024-02-24 11:45:54,835 - build_posterior_wrapper took 0.000741 seconds
+2024-02-24 11:45:54,835 - TPE using 29/29 trials with best loss 1.157692
+2024-02-24 11:50:02,922 - {'lr': 0.001364411620381146},best_val_loss:【2.3125806382271508】
+2024-02-24 11:50:02,926 - build_posterior_wrapper took 0.000833 seconds
+2024-02-24 11:50:02,926 - TPE using 30/30 trials with best loss 1.157692
+2024-02-24 11:52:59,839 - {'lr': 0.009810143463390864},best_val_loss:【2.1675455570334528】
+2024-02-24 11:52:59,842 - build_posterior_wrapper took 0.000749 seconds
+2024-02-24 11:52:59,843 - TPE using 31/31 trials with best loss 1.157692
+2024-02-24 11:57:28,000 - {'lr': 0.00306484009343677},best_val_loss:【2.1612875584331643】
+2024-02-24 11:57:28,003 - build_posterior_wrapper took 0.000851 seconds
+2024-02-24 11:57:28,003 - TPE using 32/32 trials with best loss 1.157692
+2024-02-24 12:00:28,188 - {'lr': 0.005471039632336872},best_val_loss:【2.165494589905979】
+2024-02-24 12:00:28,191 - build_posterior_wrapper took 0.000819 seconds
+2024-02-24 12:00:28,191 - TPE using 33/33 trials with best loss 1.157692
+2024-02-24 12:18:17,156 - {'lr': 0.0005314652530977136},best_val_loss:【1.2278578584066278】
+2024-02-24 12:18:17,160 - build_posterior_wrapper took 0.000857 seconds
+2024-02-24 12:18:17,161 - TPE using 34/34 trials with best loss 1.157692
+2024-02-24 12:25:57,172 - {'lr': 0.0013995235133577037},best_val_loss:【2.1621207365697424】
+2024-02-24 12:25:57,175 - build_posterior_wrapper took 0.000830 seconds
+2024-02-24 12:25:57,175 - TPE using 35/35 trials with best loss 1.157692
+2024-02-24 12:28:55,624 - {'lr': 0.003807688891629265},best_val_loss:【2.23150985598758】
+2024-02-24 12:28:55,627 - build_posterior_wrapper took 0.000759 seconds
+2024-02-24 12:28:55,627 - TPE using 36/36 trials with best loss 1.157692
+2024-02-24 12:31:53,212 - {'lr': 0.004222207236826637},best_val_loss:【2.153226242012767】
+2024-02-24 12:31:53,215 - build_posterior_wrapper took 0.000839 seconds
+2024-02-24 12:31:53,215 - TPE using 37/37 trials with best loss 1.157692
+2024-02-24 12:35:37,304 - {'lr': 0.005732017449216574},best_val_loss:【2.0930436543588518】
+2024-02-24 12:35:37,308 - build_posterior_wrapper took 0.000849 seconds
+2024-02-24 12:35:37,308 - TPE using 38/38 trials with best loss 1.157692
+2024-02-24 12:49:21,832 - {'lr': 0.0001200563010723874},best_val_loss:【1.3570701062842445】
+2024-02-24 12:49:21,836 - build_posterior_wrapper took 0.000844 seconds
+2024-02-24 12:49:21,836 - TPE using 39/39 trials with best loss 1.157692
+2024-02-24 12:55:28,134 - {'lr': 0.002661667961966238},best_val_loss:【2.211740189365636】
+2024-02-24 12:55:28,137 - build_posterior_wrapper took 0.000844 seconds
+2024-02-24 12:55:28,137 - TPE using 40/40 trials with best loss 1.157692
+2024-02-24 12:59:01,252 - {'lr': 0.008629301163104506},best_val_loss:【2.195085244676827】
+2024-02-24 12:59:01,255 - build_posterior_wrapper took 0.000838 seconds
+2024-02-24 12:59:01,256 - TPE using 41/41 trials with best loss 1.157692
+2024-02-24 13:05:41,407 - {'lr': 0.000928786977272202},best_val_loss:【2.02751777224044】
+2024-02-24 13:05:41,412 - build_posterior_wrapper took 0.000831 seconds
+2024-02-24 13:05:41,412 - TPE using 42/42 trials with best loss 1.157692
+2024-02-24 13:08:37,674 - {'lr': 0.0032529646698471765},best_val_loss:【2.2277240441367923】
+2024-02-24 13:08:37,677 - build_posterior_wrapper took 0.000834 seconds
+2024-02-24 13:08:37,677 - TPE using 43/43 trials with best loss 1.157692
+2024-02-24 13:11:23,265 - {'lr': 0.007630671941036869},best_val_loss:【2.2020013698868404】
+2024-02-24 13:11:23,268 - build_posterior_wrapper took 0.000844 seconds
+2024-02-24 13:11:23,269 - TPE using 44/44 trials with best loss 1.157692
+2024-02-24 13:21:26,361 - {'lr': 0.0015642763942354829},best_val_loss:【2.193744360833739】
+2024-02-24 13:21:26,364 - build_posterior_wrapper took 0.000836 seconds
+2024-02-24 13:21:26,365 - TPE using 45/45 trials with best loss 1.157692
+2024-02-24 13:26:34,187 - {'lr': 0.002391379008526006},best_val_loss:【2.2226894734332268】
+2024-02-24 13:26:34,190 - build_posterior_wrapper took 0.000841 seconds
+2024-02-24 13:26:34,190 - TPE using 46/46 trials with best loss 1.157692
+2024-02-24 13:44:40,065 - {'lr': 0.0005210719597027616},best_val_loss:【1.1886865239892777】
+2024-02-24 13:44:40,069 - build_posterior_wrapper took 0.000835 seconds
+2024-02-24 13:44:40,070 - TPE using 47/47 trials with best loss 1.157692
