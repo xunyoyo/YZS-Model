@@ -37,8 +37,8 @@ def main():
         save_dir="save",
         dataset="Ceasvlu",
         save_model=True,
-        lr=0.0005,
-        batch_size=64,
+        lr=0.0005202938443000005,
+        batch_size=40,
         is_using_trained_data=False,
         model_name="Epoch 1-643, Train Loss_ 1.0191, Val Loss_ 1.0195, Train R2_ 0.7854, Val R2_ 0.7982.pt"
     )
@@ -50,6 +50,8 @@ def main():
     fpath = os.path.join(data_root, DATASET)
 
     full_dataset = MyOwnDataset(fpath, train=True)
+    test_dataset1 = MyOwnDataset(os.path.join(data_root, "xunyoyotest"), train=True)
+    test_dataset2 = MyOwnDataset(os.path.join(data_root, "Llinas2020"), train=True)
 
 
     train_size = int(0.9 * len(full_dataset))
@@ -57,12 +59,14 @@ def main():
 
     train_set, val_set = random_split(full_dataset, [train_size, val_size])
 
-    train_loader = DataLoader(train_set, batch_size=64, shuffle=True, num_workers=2)
-    val_loader = DataLoader(val_set, batch_size=264, shuffle=True, num_workers=2)
+    train_loader = DataLoader(train_set, batch_size=64, shuffle=True, num_workers=1)
+    val_loader = DataLoader(val_set, batch_size=64, shuffle=True, num_workers=1)
+    test1_loader = DataLoader(test_dataset1, batch_size=64, shuffle=True, num_workers=1)
+    test2_loader = DataLoader(test_dataset2, batch_size=64, shuffle=True, num_workers=1)
 
     device = torch.device('cuda:0')
 
-    model = MYMODEL().to(device)
+    model = MYMODEL(92, 98, 0.30467697373969527, 4, 16).to(device)
 
     if params.get('is_using_trained_data'):
         model.load_state_dict(torch.load(os.path.join(save_dir, params.get("model_name"))))
@@ -119,22 +123,60 @@ def main():
 
         val_r2 = r2_score(val_targets, val_preds)
 
+        model.eval()
+        test1_loss = 0.0
+        test1_preds = []
+        test1_targets = []
+
+        with torch.no_grad():
+            for data in test1_loader:
+                data = data.to(device)
+                pred = model(data)
+                loss = criterion(pred.view(-1), data.y.view(-1))
+
+                test1_loss += loss.item() * data.num_graphs
+                test1_preds.extend(pred.view(-1).detach().cpu().numpy())
+                test1_targets.extend(data.y.view(-1).detach().cpu().numpy())
+
+        test1_r2 = r2_score(test1_targets, test1_preds)
+
+        model.eval()
+        test2_loss = 0.0
+        test2_preds = []
+        test2_targets = []
+
+        with torch.no_grad():
+            for data in test2_loader:
+                data = data.to(device)
+                pred = model(data)
+                loss = criterion(pred.view(-1), data.y.view(-1))
+
+                test2_loss += loss.item() * data.num_graphs
+                test2_preds.extend(pred.view(-1).detach().cpu().numpy())
+                test2_targets.extend(data.y.view(-1).detach().cpu().numpy())
+
+        test2_r2 = r2_score(test2_targets, test2_preds)
+
         train_loss = math.sqrt(train_loss / len(train_loader.dataset))
         val_loss = math.sqrt(val_loss / len(val_loader.dataset))
+        test1_loss = math.sqrt(test1_loss / len(test1_loader.dataset))
+        test2_loss = math.sqrt(test2_loss / len(test2_loader.dataset))
 
         msg = (f"Epoch {epoch + 1}-{num_iter}, Train Loss_ {train_loss:.4f}, Val Loss_ {val_loss:.4f}, "
-               f"Train R2_ {train_r2:.4f}, Val R2_ {val_r2:.4f}")
+               f"Test1 Loss_ {test1_loss:.4f}, Test2 Loss_ {test2_loss:.4f}, Train R2_ {train_r2:.4f}, Val R2_ {val_r2:.4f}, "
+               f"Test1 R2_ {test1_r2:.4f}, Test2 R2_ {test2_r2:.4f}")
 
         logging.info(msg)
         print(msg)
 
+        if save_model:
+            save_model_dict(model, save_dir, msg)
+            msg = os.path.join(save_dir, msg + '.pt')
+            logging.info(f"model has been saved to save {msg}")
+
         if val_r2 > best_val_r2:
             best_val_r2 = val_r2
             epochs_no_improve = 0
-            if save_model:
-                save_model_dict(model, save_dir, msg)
-                msg = os.path.join(save_dir, msg + '.pt')
-                logging.info(f"model has been saved to save {msg}")
 
         else:
             epochs_no_improve += 1

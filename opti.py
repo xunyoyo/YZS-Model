@@ -1,7 +1,5 @@
 """
 By xunyoyo & kesmeey
-Part of code come from GitHub:
-https://github.com/ziduzidu/CSDTI
 """
 
 import math
@@ -18,7 +16,7 @@ from smiles2topology import *
 
 def objective(params):
     best_val_loss = float('inf')
-    batch_size = 64
+    batch_size = int(params['batch_size'])
     data_root = "Datasets"
     DATASET = "Ceasvlu"
     lr = 0.0005
@@ -37,14 +35,14 @@ def objective(params):
     device = torch.device('cuda:0')
     # model = MYMODEL(24, int(params['dim']), params['dropout'], int(params['depth']), int(params['heads']), int(params['dim_head']),
     #                 int(params['mlp_dim'])).to(device)
-    model = MYMODEL(24, int(params['dim']), params['dropout'], int(params['depth']), int(params['heads'])).to(device)
+    model = MYMODEL(num_features=92, dim=int(params['dim']), dropout=params['dropout'], depth=int(params['depth']), heads=int(params['heads'])).to(device)
 
     epochs = 60000
     steps_per_epoch = 15
     num_iter = math.ceil((epochs * steps_per_epoch) / len(train_loader))
     cunt = 0
 
-    optimizer = optim.Adam(model.parameters(), lr=0.00066)
+    optimizer = optim.Adam(model.parameters(), lr=params['lr'])
     criterion = nn.MSELoss()
 
     for epoch in tqdm(range(num_iter)):
@@ -76,7 +74,7 @@ def objective(params):
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             cunt = 0
-        elif cunt > 10:
+        elif cunt > 20:
             break
 
         print(params)
@@ -87,12 +85,12 @@ def objective(params):
 
 def main():
     space = {
-        'lr': hp.uniform('lr', 0.0005, 0.002),
-        'dim': hp.quniform('dim', 30, 40, 1),
+        'lr': hp.uniform('lr', 0.0003, 0.0007),
+        'dim': hp.quniform('dim', 92, 128, 2),
         'dropout': hp.uniform('dropout', 0.25, 0.35),
-        'depth': hp.quniform('depth', [6, 8, 10, 12]),
-        'heads': hp.choice('heads', [8, 16]),
-        # 'batch_size': hp.quniform('batch_size', 30, 40, 1),
+        'depth': hp.choice('depth', [2, 4, 6, 8, 10, 12]),
+        'heads': hp.choice('heads', [4, 8, 12, 16]),
+        'batch_size': hp.quniform('batch_size', 24, 72, 8),
     }
 
     trials = Trials()
@@ -100,7 +98,7 @@ def main():
         fn=objective,
         space=space,
         algo=tpe.suggest,
-        max_evals=100,
+        max_evals=200,
         trials=trials
     )
 

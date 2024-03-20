@@ -2,6 +2,7 @@
 By xunyoyo & kesmeey
 Part of code come from GitHub:
 https://github.com/ziduzidu/CSDTI
+https://github.com/waqarahmadm019/AquaPred
 """
 
 import os
@@ -12,7 +13,93 @@ from torch_geometric.data import InMemoryDataset
 from torch_geometric import data as DATA
 import networkx as nx
 from rdkit import Chem
+from rdkit.Chem import rdmolops, MolFromSmiles
 from tqdm import tqdm
+
+
+def atom_feature(mol):
+    symbols = ['K', 'Y', 'V', 'Sm', 'Dy', 'In', 'Lu', 'Hg', 'Co', 'Mg',  # list of all elements in the dataset
+               'Cu', 'Rh', 'Hf', 'O', 'As', 'Ge', 'Au', 'Mo', 'Br', 'Ce',
+               'Zr', 'Ag', 'Ba', 'N', 'Cr', 'Sr', 'Fe', 'Gd', 'I', 'Al',
+               'B', 'Se', 'Pr', 'Te', 'Cd', 'Pd', 'Si', 'Zn', 'Pb', 'Sn',
+               'Cl', 'Mn', 'Cs', 'Na', 'S', 'Ti', 'Ni', 'Ru', 'Ca', 'Nd',
+               'W', 'H', 'Li', 'Sb', 'Bi', 'La', 'Pt', 'Nb', 'P', 'F', 'C',
+               'Re', 'Ta', 'Ir', 'Be', 'Tl']
+
+    hybridizations = [
+        Chem.rdchem.HybridizationType.S,
+        Chem.rdchem.HybridizationType.SP,
+        Chem.rdchem.HybridizationType.SP2,
+        Chem.rdchem.HybridizationType.SP3,
+        Chem.rdchem.HybridizationType.SP3D,
+        Chem.rdchem.HybridizationType.SP3D2,
+        'other',
+    ]
+
+    stereos = [
+        Chem.rdchem.BondStereo.STEREONONE,
+        Chem.rdchem.BondStereo.STEREOANY,
+        Chem.rdchem.BondStereo.STEREOZ,
+        Chem.rdchem.BondStereo.STEREOE,
+    ]
+    features = []
+    xs = []
+    adj = rdmolops.GetAdjacencyMatrix(mol, useBO=True)
+    for atom in mol.GetAtoms():
+        symbol = [0.] * len(symbols)
+        symbol[symbols.index(atom.GetSymbol())] = 1.
+        # comment degree from 6 to 8
+        degree = [0.] * 8
+        degree[atom.GetDegree()] = 1.
+        formal_charge = atom.GetFormalCharge()
+        radical_electrons = atom.GetNumRadicalElectrons()
+        hybridization = [0.] * len(hybridizations)
+        hybridization[hybridizations.index(
+            atom.GetHybridization())] = 1.
+        aromaticity = 1. if atom.GetIsAromatic() else 0.
+        hydrogens = [0.] * 5
+        hydrogens[atom.GetTotalNumHs()] = 1.
+        chirality = 1. if atom.HasProp('_ChiralityPossible') else 0.
+        chirality_type = [0.] * 2
+        if atom.HasProp('_CIPCode'):
+            chirality_type[['R', 'S'].index(atom.GetProp('_CIPCode'))] = 1.
+
+        x = torch.tensor(symbol + degree + [formal_charge] +
+                         [radical_electrons] + hybridization +
+                         [aromaticity] + hydrogens + [chirality] +
+                         chirality_type)
+        xs.append(x)
+
+        features = torch.stack(xs, dim=0)
+
+    edge_indices = []
+    edge_attrs = []
+    for bond in mol.GetBonds():
+        edge_indices += [[bond.GetBeginAtomIdx(), bond.GetEndAtomIdx()]]
+        edge_indices += [[bond.GetEndAtomIdx(), bond.GetBeginAtomIdx()]]
+
+        bond_type = bond.GetBondType()
+        single = 1. if bond_type == Chem.rdchem.BondType.SINGLE else 0.
+        double = 1. if bond_type == Chem.rdchem.BondType.DOUBLE else 0.
+        triple = 1. if bond_type == Chem.rdchem.BondType.TRIPLE else 0.
+        aromatic = 1. if bond_type == Chem.rdchem.BondType.AROMATIC else 0.
+        conjugation = 1. if bond.GetIsConjugated() else 0.
+        ring = 1. if bond.IsInRing() else 0.
+        stereo = [0.] * 4
+        stereo[stereos.index(bond.GetStereo())] = 1.
+
+        edge_attr = torch.tensor(
+            [single, double, triple, aromatic, conjugation, ring] + stereo)
+
+        edge_attrs += [edge_attr, edge_attr]
+
+    if len(edge_attrs) == 0:
+        edge_index = torch.zeros((2, 0), dtype=torch.long)
+        edge_attr = torch.zeros((0, 10), dtype=torch.float)
+    else:
+        edge_index = torch.tensor(edge_indices).t().contiguous()
+        edge_attr = torch.stack(edge_attrs, dim=0)
+    return features, edge_index, edge_attr, adj
 
 
 class MyOwnDataset(InMemoryDataset):
@@ -35,6 +122,7 @@ class MyOwnDataset(InMemoryDataset):
     def download(self):
         pass
 
+
     @staticmethod
     def pre_process(data_path, data_dict):
         file = pd.read_csv(data_path)
@@ -42,9 +130,9 @@ class MyOwnDataset(InMemoryDataset):
         data_lists = []
         for index, row in file.iterrows():
             smiles = row['SMILES']
-            logS = row['LogS']
+            logS = row['logS']
 
-            x, edge_index, edge_index2, edge_attr = data_dict[smiles]
+            x, edge_index, edge_attr = data_dict[smiles]
 
             if x.max() == x.min():
                 x = (x - x.min()) / 0.000001
@@ -55,7 +143,6 @@ class MyOwnDataset(InMemoryDataset):
                 data = DATA.Data(
                     x=x,
                     edge_index=edge_index,
-                    edge_index2=edge_index2,
                     edge_attr=edge_attr,
                     y=torch.FloatTensor([logS])
                 )
@@ -67,158 +154,46 @@ class MyOwnDataset(InMemoryDataset):
         return data_lists
 
     def process(self):
-        file_train = pd.read_csv(self.raw_paths[0])
-        file = file_train
+        # 假设self.raw_paths[0]是包含SMILES字符串和标签的CSV文件路径
+        df = pd.read_csv(self.raw_paths[0])
+        data_list = []
 
-        smiles = file['SMILES'].unique()
-        graph_dict = dict()
-
-        for smile in tqdm(smiles, total=len(smiles)):
+        for index, row in tqdm(df.iterrows(), total=df.shape[0], desc="Processing molecules"):
+            smile = row['isomeric_smiles']
+            label = row['logS0']  # 或者是适合您数据的标签列名
             mol = Chem.MolFromSmiles(smile)
-            g = self.mol2graph(mol)
-            graph_dict[smile] = g
 
-        train_list = self.pre_process(self.raw_paths[0], graph_dict)
+            if mol is None:  # 跳过无法解析的SMILES字符串
+                print(f"Cannot parse SMILE: {smile}")
+                continue
 
-        if self.pre_filter is not None:
-            train_list = [train for train in train_list if self.pre_filter(train)]
-            # test_list = [test for test in test_list if self.pre_filter(test)]
+            # 使用您的mol2graph函数或其他适当的函数处理分子
+            features, edge_index, edge_attr, adj = atom_feature(mol)
 
-        if self.pre_transform is not None:
-            train_list = [self.pre_transform(train) for train in train_list]
-            # test_list = [self.pre_transform(test) for test in test_list]
+            # 创建Data对象
+            graph = DATA.Data(x=torch.Tensor(features),
+                      edge_index=edge_index,
+                      edge_attr=edge_attr,
+                      y=torch.FloatTensor([label]),
+                      A=adj,
+                      smiles=str(smile),
+                      )
+            print(graph)
+            data_list.append(graph)
 
-        print("图建完了。")
+        # 保存处理后的数据
+        if len(data_list) > 0:
+            self.data, self.slices = self.collate(data_list)
+            torch.save((self.data, self.slices), self.processed_paths[0])
+        else:
+            print("No data to save.")
 
-        data, slices = self.collate(train_list)
-        torch.save((data, slices), self.processed_paths[0])
-
-    def mol2graph(self, mol):
-        if mol is None:
-            return None
-
-        graph = nx.DiGraph()
-
-        # 创建点
-        for i in range(mol.GetNumAtoms()):
-            atom_i = mol.GetAtomWithIdx(i)
-
-            """
-            i: 原子下标
-            atom_symbol: 原子符号
-            atom_id: 原子序号
-            is_aromatic: 是否芳香
-            hybridization: 杂化情况
-            FormalCharge: 形式电荷情况
-            IsInRing: 是否在环中
-            ExplicitHs: 原子的显式氢原子的数量
-            ImplicitHs: 原子的隐式氢原子的总数
-            Mass: 原子的质量
-            ExplicitValence: 原子的显式价数
-            """
-            graph.add_node(
-                i,
-                atom_symbol=atom_i.GetSymbol(),
-                atom_id=atom_i.GetAtomicNum(),
-                is_aromatic=atom_i.GetIsAromatic(),
-                hybridization=atom_i.GetHybridization(),
-                num_h=atom_i.GetTotalNumHs(),
-                FormalCharge=atom_i.GetFormalCharge(),
-                IsInRing=atom_i.IsInRing(),
-                ExplicitHs=atom_i.GetNumExplicitHs(),
-                ImplicitHs=atom_i.GetNumImplicitHs(),
-                Mass=atom_i.GetMass(),
-                ExplicitValence=atom_i.GetExplicitValence()
-            )
-
-        # 连接边
-        for i in range(mol.GetNumAtoms()):
-            for j in range(mol.GetNumAtoms()):
-                e_ij = mol.GetBondBetweenAtoms(i, j)
-                if e_ij is not None:
-
-                    """
-                    i: 键左边的原子下标
-                    j: 键右边的原子下标
-                    bond_type: 键的类型
-                    IsConjugated: 是否共轭
-                    IsAromatic: 是否芳香
-                    """
-                    graph.add_edge(
-                        i, j,
-                        bond_type=e_ij.GetBondType(),
-                        IsConjugated=int(e_ij.GetIsConjugated()),
-                        IsAromatic=int(e_ij.GetIsAromatic())
-                    )
-
-        node_attr = self.get_nodes(graph)
-        edge_index, edge_attr = self.get_edges(graph)
-        edge_index2 = self.get_2hop(graph)
-
-        return node_attr, edge_index, edge_index2, edge_attr
-
-    @staticmethod
-    def get_nodes(graph):
-        feature = []
-
-        for node, feat in graph.nodes(data=True):
-            h_t = []
-            # 元素符号作为标记加入特征
-            h_t += [int(feat['atom_symbol'] == x)
-                    for x in ['H', 'C', 'N', 'O', 'F', 'Cl', 'S', 'Br', 'I', 'P', 'Na', 'As', 'K']]
-            h_t.append(feat['atom_id'])
-            h_t.append(int(feat['is_aromatic']))
-            h_t += [int(feat['hybridization'] == x)
-                    for x in (Chem.rdchem.HybridizationType.SP,
-                              Chem.rdchem.HybridizationType.SP2,
-                              Chem.rdchem.HybridizationType.SP3)
-                    ]
-            h_t.append(feat['FormalCharge'])
-            h_t.append(int(feat['IsInRing']))
-            h_t.append(feat['ExplicitHs'])
-            h_t.append(feat['ImplicitHs'])
-            h_t.append(feat['Mass'])
-            h_t.append(feat['ExplicitValence'])
-            feature.append((node, h_t))
-
-        feature.sort(key=lambda item: item[0])
-        node_attr = torch.FloatTensor([item[1] for item in feature])
-
-        return node_attr
-
-    @staticmethod
-    def get_edges(graph):
-        edge = {}
-        for u, v, feat in graph.edges(data=True):
-            e_t = [int(feat['bond_type'] == x)
-                   for x in (Chem.rdchem.BondType.SINGLE,
-                             Chem.rdchem.BondType.DOUBLE,
-                             Chem.rdchem.BondType.TRIPLE,
-                             Chem.rdchem.BondType.AROMATIC)
-                   ]
-            e_t.append(int(not feat['IsConjugated']))
-            e_t.append(int(feat['IsConjugated']))
-            e_t.append(int(not feat['IsAromatic']))
-            e_t.append(int(feat['IsAromatic']))
-            edge[(u, v)] = e_t
-
-        if len(edge) == 0:
-            return torch.LongTensor([[0], [0]]), torch.FloatTensor([[0, 0, 0, 0, 0, 0, 0, 0]])
-
-        edge_index = torch.LongTensor(list(edge.keys())).transpose(0, 1)
-        edge_attr = torch.FloatTensor(list(edge.values()))
-        return edge_index, edge_attr
-
-    @staticmethod
-    def get_2hop(graph):
-        M = nx.adjacency_matrix(graph)
-        M = M.dot(M)
-        edge_index2 = torch.LongTensor(M.nonzero())
-        return edge_index2
+        print("Data processing and saving completed.")
 
 
 if __name__ == "__main__":
-    # MyOwnDataset(os.path.join('Datasets','Lovric'))
+    MyOwnDataset(os.path.join('Datasets','Lovric'))
     # MyOwnDataset(os.path.join('Datasets', 'Llinas2020'))
+    # MyOwnDataset(os.path.join('Datasets', 'Llinas2020-2'))
     # MyOwnDataset(os.path.join('Datasets', 'Ceasvlu'))
-    MyOwnDataset(os.path.join('Datasets', 'xunyoyotest'))
+    # MyOwnDataset(os.path.join('Datasets', 'xunyoyotest'))

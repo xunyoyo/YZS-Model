@@ -11,7 +11,7 @@ from einops import rearrange
 from torch import einsum
 from torch.nn import LSTM
 from torch_geometric.nn import GCNConv
-from torch_geometric.nn import global_mean_pool
+from torch_geometric.nn import global_add_pool
 
 
 def exists(val):
@@ -88,7 +88,7 @@ class MSA(nn.Module):
 
 
 class Transformer(nn.Module):
-    def __init__(self, dim, depth=5, heads=8, dim_head=24, mlp_dim=128, dropout=0.1):
+    def __init__(self, dim, depth=6, heads=8, dim_head=92, mlp_dim=256, dropout=0.25):
         super().__init__()
 
         self.layers = nn.ModuleList([])
@@ -108,59 +108,46 @@ class Transformer(nn.Module):
 
 
 class MYMODEL(torch.nn.Module):
-    def __init__(self, num_features=24, dim=32, dropout=0.0005, depth=6, heads=8):
+    def __init__(self, num_features=92, dim=128, dropout=0.251903250716151, depth=6, heads=8):
         super(MYMODEL, self).__init__()
 
         self.dropout = nn.Dropout(dropout)
         self.relu = nn.ReLU()
         self.output = 1
 
-        self.conv11 = GCNConv(num_features, dim)
-        self.conv12 = GCNConv(num_features, dim)
+        self.conv = GCNConv(num_features, dim)
 
-        self.conv21 = GCNConv(dim * 2, dim)
-        self.conv22 = GCNConv(dim * 2, dim)
+        # self.transformer = Transformer(dim, depth, heads, dim, dim * 2)
+        self.transformer = Transformer(dim)
 
-        self.transformer = Transformer(dim * 2, depth, heads, dim * 2, dim * 8)
-
-        self.lstm = LSTM(input_size=dim * 2, hidden_size=dim, num_layers=1, batch_first=True)
+        self.lstm = LSTM(input_size=dim, hidden_size=dim, num_layers=1, batch_first=True)
 
         self.fc = nn.Sequential(
             nn.Linear(dim, 256),
             nn.ReLU(),
             nn.Dropout(dropout),
 
-            nn.Linear(256, 512),
+            nn.Linear(256, 256),
             nn.ReLU(),
             nn.Dropout(dropout),
 
-            nn.Linear(512, 256),
-            nn.ReLU(),
-            nn.Dropout(dropout),
             nn.Linear(256, 1)
         )
 
     def forward(self, data):
         x, edge_index, batch = data.x, data.edge_index, data.batch
-        edge_index2 = data.edge_index2
 
-        x1 = self.relu(self.conv11(x, edge_index))
-        x2 = self.relu(self.conv12(x, edge_index2))
+        # print(data.x.shape)
 
-        x12 = torch.cat((x1, x2), dim=1)
+        x = self.relu(self.conv(x, edge_index))
 
-        x1 = self.relu(self.conv21(x12, edge_index))
-        x2 = self.relu(self.conv22(x12, edge_index2))
-
-        x12 = torch.cat((x1, x2), dim=1)
-
-        transformer_input = x12.unsqueeze(0)
+        transformer_input = x.unsqueeze(0)
         transformer_out = self.transformer(transformer_input)
 
         lstm_out, (hn, cn) = self.lstm(transformer_out)
 
         lstm_out = lstm_out[-1, :, :]
-        graph_features = global_mean_pool(lstm_out, batch)
+        graph_features = global_add_pool(lstm_out, batch)
 
         out = self.fc(graph_features)
 

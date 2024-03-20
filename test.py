@@ -45,7 +45,7 @@ def main():
         data_root="Datasets",
         save_dir="save",
         dataset="xunyoyotest",
-        model_name="Epoch 915-2572, Train Loss_ 0.7073, Val Loss_ 0.8587, Train R2_ 0.8973, Val R2_ 0.8485.pt"
+        model_name="Epoch 62-720, Train Loss_ 0.9255, Val Loss_ 0.8965, Test1 Loss_ 0.6001, Test2 Loss_ 0.9728, Train R2_ 0.8257, Val R2_ 0.8208, Test1 R2_ 0.5433, Test2 R2_ 0.4095.pt"
     )
 
     save_dir = params.get("save_dir")
@@ -54,10 +54,11 @@ def main():
     fpath = os.path.join(data_root, DATASET)
 
     test_dataset = MyOwnDataset(fpath, train=True)
-    test_loader = DataLoader(test_dataset, batch_size=128, shuffle=True, num_workers=4)
+    test_loader = DataLoader(test_dataset, batch_size=72, shuffle=True, num_workers=4)
 
     device = torch.device('cuda:0')
-    model = MYMODEL().to(device)
+    model = MYMODEL(92, 98, 0.30467697373969527, 4, 16).to(device)
+
     model.load_state_dict(torch.load(os.path.join(save_dir, params.get("model_name"))))
 
     rmse, r2 = val(model, test_loader, device)
