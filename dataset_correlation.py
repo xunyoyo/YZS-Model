@@ -1,5 +1,5 @@
 """
-By xunyoyo & kesmeey
+By xunyoyo
 用处: 计算两个数据集相同分子的LogS0数据的一致化程度
 使用方法: 两个分子的数据集仅保留两列[SMILE,LogS0]即可
 """
