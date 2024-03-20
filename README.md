@@ -13,6 +13,34 @@ networkx==2.5.1
 rdkit-pypi
 ```
 
-Other packages can be found in `requirements.txt`.
+Other packages can be found from `requirements.txt`.
 
-## 
+## Datasets
+
+You can download the training and testing dataset from:
+
+[All datasets in the raw folders.](https://github.com/xunyoyo/YZS-Model/tree/main/Datasets)
+
+## Useage
+
++ `smile2topology.py`: Convert .csv files to datasets.
++ `model.py`: The whole YZS-model.
++ `opti.py`: Using searching package to find the perfect parameters.
++ `train.py`: 
+
+## About
+
+authors:
++ Chenxu Wang, Shihezi University (PRC, Xinjiang)
+    + e-mail:zxsdsama@gmail.com
++ Haowei Ming, Peking University (PRC, Beijing)
++ Jian He, Xinjiang University (PRC, Xinjiang)
+
+Statement:
++ Part of code come from:
+```
+https://github.com/ziduzidu/CSDTI
+https://github.com/ltorres97/FS-CrossTR
+https://github.com/waqarahmadm019/AquaPred
+``` 
+When using the above-mentioned open-source code, we have already indicated this in the documents.
