@@ -37,7 +37,7 @@ authors:
 + Jian He, Xinjiang University (PRC, Xinjiang)
 
 Statement:
-+ Part of code come from:
++ Part of code come from: 
 ```
 https://github.com/ziduzidu/CSDTI
 https://github.com/ltorres97/FS-CrossTR
