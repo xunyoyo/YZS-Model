@@ -50,7 +50,7 @@ def main():
     fpath = os.path.join(data_root, DATASET)
 
     full_dataset = MyOwnDataset(fpath, train=True)
-    test_dataset1 = MyOwnDataset(os.path.join(data_root, "xunyoyotest"), train=True)
+    test_dataset1 = MyOwnDataset(os.path.join(data_root, "APtest"), train=True)
     test_dataset2 = MyOwnDataset(os.path.join(data_root, "Llinas2020"), train=True)
 
 

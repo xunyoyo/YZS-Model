@@ -123,36 +123,6 @@ class MyOwnDataset(InMemoryDataset):
         pass
 
 
-    @staticmethod
-    def pre_process(data_path, data_dict):
-        file = pd.read_csv(data_path)
-
-        data_lists = []
-        for index, row in file.iterrows():
-            smiles = row['SMILES']
-            logS = row['logS']
-
-            x, edge_index, edge_attr = data_dict[smiles]
-
-            if x.max() == x.min():
-                x = (x - x.min()) / 0.000001
-            else:
-                x = (x - x.min()) / (x.max() - x.min())
-
-            try:
-                data = DATA.Data(
-                    x=x,
-                    edge_index=edge_index,
-                    edge_attr=edge_attr,
-                    y=torch.FloatTensor([logS])
-                )
-
-                data_lists.append(data)
-            except:
-                print("这个SMILE无法处理: ", smiles)
-
-        return data_lists
-
     def process(self):
         # 假设self.raw_paths[0]是包含SMILES字符串和标签的CSV文件路径
         df = pd.read_csv(self.raw_paths[0])
@@ -196,4 +166,4 @@ if __name__ == "__main__":
     # MyOwnDataset(os.path.join('Datasets', 'Llinas2020'))
     # MyOwnDataset(os.path.join('Datasets', 'Llinas2020-2'))
     # MyOwnDataset(os.path.join('Datasets', 'Ceasvlu'))
-    # MyOwnDataset(os.path.join('Datasets', 'xunyoyotest'))
+    # MyOwnDataset(os.path.join('Datasets', 'APtest'))

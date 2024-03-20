@@ -119,7 +119,19 @@ def permutation_feature_importance2(model, data_loader, num_features=24):
         pdp.pdp_plot(pdp_goals, feature_name, plot_lines=True, frac_to_plot=100, plot_pts_dist=True)
 
 if __name__ == "__main__":
-    dataset = MyOwnDataset(os.path.join('Datasets', 'xunyoyotest'))
+    params = dict(
+        data_root="Datasets",
+        save_dir="save",
+        dataset="APtest",
+        model_name="Epoch 62-720, Train Loss_ 0.9255, Val Loss_ 0.8965, Test1 Loss_ 0.6001, Test2 Loss_ 0.9728, Train R2_ 0.8257, Val R2_ 0.8208, Test1 R2_ 0.5433, Test2 R2_ 0.4095.pt"
+    )
+
+    save_dir = params.get("save_dir")
+    DATASET = params.get("dataset")
+    data_root = params.get("data_root")
+    fpath = os.path.join(data_root, DATASET)
+
+    dataset = MyOwnDataset(os.path.join('Datasets', 'APtest'))
     mymodel = MYMODEL().to(device)
-    my_data_loader = DataLoader(dataset, batch_size=8, shuffle=True)
+    my_data_loader = DataLoader(dataset, batch_size=72, shuffle=True)
     permutation_feature_importance2(mymodel, my_data_loader)

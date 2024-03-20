@@ -1,7 +1,5 @@
 """
 By xunyoyo & kesmeey
-Part of code come from GitHub:
-https://github.com/ziduzidu/CSDTI
 """
 
 import os
@@ -44,7 +42,7 @@ def main():
     params = dict(
         data_root="Datasets",
         save_dir="save",
-        dataset="xunyoyotest",
+        dataset="APtest",
         model_name="Epoch 62-720, Train Loss_ 0.9255, Val Loss_ 0.8965, Test1 Loss_ 0.6001, Test2 Loss_ 0.9728, Train R2_ 0.8257, Val R2_ 0.8208, Test1 R2_ 0.5433, Test2 R2_ 0.4095.pt"
     )
 
