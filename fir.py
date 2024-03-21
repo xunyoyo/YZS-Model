@@ -52,16 +52,7 @@ print(importance_scores)
 # 特征名称 - 假设我们简单地用数字来代表每个特征
 feature_names = [f"Feature {i}" for i in range(1, num_features + 1)]
 
-# 创建一个条形图
-plt.figure(figsize=(15, 10))  # 设置图形的大小
-plt.barh(feature_names, importance_scores, color='skyblue')  # 水平条形图
-plt.xlabel('Importance Score')  # x轴标签
-plt.ylabel('Features')  # y轴标签
-plt.title('Feature Importance')  # 图形标题
-plt.gca().invert_yaxis()  # 逆转y轴，使得重要性最高的特征在顶部
-plt.show()
-# 假定importance_scores是已经计算好的特征重要性得分
-# feature_names是对应的特征名称列表
+
 
 # 根据importance_scores对特征名称进行排序，获取排序后的索引
 sorted_indices = np.argsort(importance_scores)[::-1]  # 降序排序
@@ -137,3 +128,71 @@ plt.title('Feature Importance Distribution')
 
 # 显示图形
 plt.show()
+
+
+# 初始化一个新的字典来存储每个分类及其对应特征的重要性得分
+new_feature_scores = {}
+
+# 对于新的特征类别中的每一类，累加其对应的旧特征的重要性得分
+for category, old_features in new_feature_categories.items():
+    # 初始化该类别下所有旧特征的重要性得分列表
+    scores_for_category = []
+    # 对于每个旧特征
+    for old_feature in old_features:
+        # 如果特征存在于feature_names中，则获取其重要性得分，否则得分为0
+        if old_feature in feature_names:
+            index = feature_names.index(old_feature)
+            score = importance_scores[index]
+        else:
+            score = 0
+        # 将得分添加到该类别的列表中
+        scores_for_category.append(score)
+    # 将该类别及其对应的得分列表添加到新字典中
+    new_feature_scores[category] = scores_for_category
+
+# 打印新的分类及其对应的原始特征的重要性得分
+for category, scores in new_feature_scores.items():
+    print(f"{category}: {scores}")
+
+
+'''
+# 初始化一个新的得分矩阵
+new_scores = np.zeros(len(new_feature_categories))
+new_counts = np.zeros(len(new_feature_categories))  # 用于记录每个新特征类别中的特征数量
+
+# 对于新的特征类别中的每一类，计算其对应的旧特征的重要性得分的平均值
+for i, (category, old_features) in enumerate(new_feature_categories.items()):
+    # 找到旧特征名称在 feature_names 中的索引
+    indices = [feature_names.index(old_feature) for old_feature in old_features if old_feature in feature_names]
+    # 计算这些索引对应的重要性得分的总和
+    new_scores[i] = importance_scores[indices].sum()
+    # 记录该类别中特征的数量
+    new_counts[i] = len(indices)
+
+# 使用每个类别的特征数量来计算平均得分
+new_average_scores = new_scores / new_counts
+
+# 更新 feature_names 为新的特征分类名称
+new_feature_names = list(new_feature_categories.keys())
+
+# 打印新的特征名称和对应的平均重要性得分
+for name, score in zip(new_feature_names, new_average_scores):
+    print(f"{name}: {score}")
+colors = ['blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'orange', 'purple', 'lime', 'pink']
+
+explode = [0.1] + [0] * (len(new_feature_names) - 1)  # 只分离第一部分
+
+# 创建饼图
+plt.figure(figsize=(8, 6))
+plt.pie(new_average_scores, labels=new_feature_names, autopct='%1.1f%%', startangle=140, explode=explode, colors=colors)
+print("00")
+for i in range(0,8):
+    print(new_average_scores[i],new_feature_names[i])
+# 添加图例
+plt.legend(new_feature_names, loc="best")
+
+# 添加标题
+plt.title('Feature Importance Distribution Based on Average Score')
+
+
+'''
