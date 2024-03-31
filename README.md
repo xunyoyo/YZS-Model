@@ -1,5 +1,8 @@
 # YZS-model: A Predictive Model for Organic Drug Solubility Based on Graph Convolutional Networks and Transformer-Attention.
 
+[1.pdf](https://github.com/xunyoyo/YZS-Model/files/14814695/1.pdf)
+
+
 ## Configuration of the YSZ-model environment
 
 ```
