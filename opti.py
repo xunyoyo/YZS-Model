@@ -33,7 +33,8 @@ def objective(params):
     val_loader = DataLoader(val_set, batch_size=batch_size, shuffle=True, num_workers=2)
 
     device = torch.device('cuda:0')
-
+    # model = MYMODEL(24, int(params['dim']), params['dropout'], int(params['depth']), int(params['heads']), int(params['dim_head']),
+    #                 int(params['mlp_dim'])).to(device)
     model = MYMODEL(num_features=92, dim=int(params['dim']), dropout=params['dropout'], depth=int(params['depth']), heads=int(params['heads'])).to(device)
 
     epochs = 60000

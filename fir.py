@@ -154,8 +154,8 @@ for category, old_features in new_feature_categories.items():
 for category, scores in new_feature_scores.items():
     print(f"{category}: {scores}")
 
+print("巴萨的")
 
-'''
 # 初始化一个新的得分矩阵
 new_scores = np.zeros(len(new_feature_categories))
 new_counts = np.zeros(len(new_feature_categories))  # 用于记录每个新特征类别中的特征数量
@@ -195,4 +195,3 @@ plt.legend(new_feature_names, loc="best")
 plt.title('Feature Importance Distribution Based on Average Score')
 
 
-'''

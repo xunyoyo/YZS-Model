@@ -88,7 +88,7 @@ def main():
 
     numcnt=100;#记数，100没更新就break
 
-    for epoch in range(num_iter):
+    for epoch in range(1):
         numcnt-=1;
         if(numcnt==0):
             break
@@ -196,7 +196,8 @@ def main():
             logging.info(f"Early stopping triggered after {early_stop_epoch} epochs without improvement.")
             print(f"Early stopping triggered after {early_stop_epoch} epochs without improvement.")
             break
-
+    Ansmsg="MINLOSS #114514"+Ansmsg
+    logging.info(Ansmsg)
 
 if __name__ == '__main__':
 
