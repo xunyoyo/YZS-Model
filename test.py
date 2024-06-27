@@ -44,7 +44,7 @@ def main():
     params = dict(
         data_root="Datasets",
         save_dir="save",
-        dataset="xunyoyotest",
+        dataset="",
         model_name=""
     )
 

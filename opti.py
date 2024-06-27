@@ -102,8 +102,8 @@ def main():
         trials=trials
     )
 
-    logging.info(f"最佳超参数：{best}")
-    print("最佳超参数：", best)
+    logging.info(f"Best paras：{best}")
+    print("Best paras：", best)
 
 
 if __name__ == '__main__':

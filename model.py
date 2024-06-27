@@ -117,7 +117,9 @@ class YZS(torch.nn.Module):
 
         self.conv = GCNConv(num_features, dim)
 
+        # opti using
         # self.transformer = Transformer(dim, depth, heads, dim, dim * 2)
+
         self.transformer = Transformer(dim)
 
         self.lstm = LSTM(input_size=dim, hidden_size=dim, num_layers=1, batch_first=True)

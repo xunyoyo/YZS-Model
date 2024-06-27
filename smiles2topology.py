@@ -11,9 +11,8 @@ import pandas as pd
 import torch
 from torch_geometric.data import InMemoryDataset
 from torch_geometric import data as DATA
-import networkx as nx
 from rdkit import Chem
-from rdkit.Chem import rdmolops, MolFromSmiles
+from rdkit.Chem import rdmolops
 from tqdm import tqdm
 
 
@@ -103,8 +102,6 @@ def atom_feature(mol):
 
 
 class MyOwnDataset(InMemoryDataset):
-    cnt1=0;
-    num2=0;
 
     def __init__(self, root, train=True, transform=None, pre_transform=None, pre_filter=None):
         super().__init__(root, transform, pre_transform, pre_filter)
@@ -115,30 +112,24 @@ class MyOwnDataset(InMemoryDataset):
 
     @property
     def raw_file_names(self):
-        if(MyOwnDataset.num2%2==0):
-            return [f'fold_{MyOwnDataset.cnt1}_x_test.csv']
-        return [f'fold_{MyOwnDataset.cnt1}_x_train.csv']
-
+        return ['data_train.csv']
 
     @property
     def processed_file_names(self):
-        if (MyOwnDataset.num2 % 2 == 0):
-            return [f'processed_{MyOwnDataset.cnt1}_x_test.pt']
-        return [f'processed_{MyOwnDataset.cnt1}_x_train.pt']
-
-
+        return ['processed_data_train.pt']
 
     def download(self):
         pass
 
+
     def process(self):
-        # 假设self.raw_paths[0]是包含SMILES字符串和标签的CSV文件路径
+
         df = pd.read_csv(self.raw_paths[0])
         data_list = []
 
         for index, row in tqdm(df.iterrows(), total=df.shape[0], desc="Processing molecules"):
             smile = row['SMILES']
-            label = row['logS']  # 或者是适合您数据的标签列名
+            label = row['logS']
             mol = Chem.MolFromSmiles(smile)
 
             if mol is None:  # 跳过无法解析的SMILES字符串
@@ -150,12 +141,12 @@ class MyOwnDataset(InMemoryDataset):
 
             # 创建Data对象
             graph = DATA.Data(x=torch.Tensor(features),
-                              edge_index=edge_index,
-                              edge_attr=edge_attr,
-                              y=torch.FloatTensor([label]),
-                              A=adj,
-                              smiles=str(smile),
-                              )
+                      edge_index=edge_index,
+                      edge_attr=edge_attr,
+                      y=torch.FloatTensor([label]),
+                      A=adj,
+                      smiles=str(smile),
+                      )
             print(graph)
             data_list.append(graph)
 
@@ -170,9 +161,9 @@ class MyOwnDataset(InMemoryDataset):
 
 
 if __name__ == "__main__":
-
-    MyOwnDataset(os.path.join('Datasets','fold'))
+    pass
+    # MyOwnDataset(os.path.join('Datasets','Lovric'))
     # MyOwnDataset(os.path.join('Datasets', 'Llinas2020'))
     # MyOwnDataset(os.path.join('Datasets', 'Llinas2020-2'))
     # MyOwnDataset(os.path.join('Datasets', 'Ceasvlu'))
-    # MyOwnDataset(os.path.join('Datasets', 'APtest'))
+
