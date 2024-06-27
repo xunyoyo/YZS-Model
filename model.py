@@ -1,3 +1,8 @@
+"""
+By xunyoyo & kesmeey
+Part of code come from GitHub:
+https://github.com/ziduzidu/CSDTI
+"""
 import torch
 import torch.nn as nn
 from einops import rearrange
