@@ -1,3 +1,8 @@
+"""
+By xunyoyo & kesmeey
+Part of code come from GitHub:
+https://github.com/ziduzidu/CSDTI
+"""
 import pandas as pd
 import torch
 from torch_geometric.data import InMemoryDataset
