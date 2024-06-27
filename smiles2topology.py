@@ -5,8 +5,6 @@ https://github.com/ziduzidu/CSDTI
 https://github.com/waqarahmadm019/AquaPred
 """
 
-import os
-
 import pandas as pd
 import torch
 from torch_geometric.data import InMemoryDataset
@@ -132,25 +130,23 @@ class MyOwnDataset(InMemoryDataset):
             label = row['logS']
             mol = Chem.MolFromSmiles(smile)
 
-            if mol is None:  # 跳过无法解析的SMILES字符串
+            if mol is None:
                 print(f"Cannot parse SMILE: {smile}")
                 continue
 
-            # 使用您的mol2graph函数或其他适当的函数处理分子
             features, edge_index, edge_attr, adj = atom_feature(mol)
 
-            # 创建Data对象
-            graph = DATA.Data(x=torch.Tensor(features),
-                      edge_index=edge_index,
-                      edge_attr=edge_attr,
-                      y=torch.FloatTensor([label]),
-                      A=adj,
-                      smiles=str(smile),
-                      )
+            graph = DATA.Data(
+                x=torch.Tensor(features),
+                edge_index=edge_index,
+                edge_attr=edge_attr,
+                y=torch.FloatTensor([label]),
+                A=adj,
+                smiles=str(smile),
+            )
             print(graph)
             data_list.append(graph)
 
-        # 保存处理后的数据
         if len(data_list) > 0:
             self.data, self.slices = self.collate(data_list)
             torch.save((self.data, self.slices), self.processed_paths[0])
