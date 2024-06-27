@@ -1,9 +1,3 @@
-"""
-By xunyoyo & kesmeey
-Part of code come from GitHub:
-https://github.com/ziduzidu/CSDTI
-https://github.com/waqarahmadm019/AquaPred
-"""
 
 import pandas as pd
 import torch
@@ -15,17 +9,19 @@ from tqdm import tqdm
 
 def atom_feature(mol):
     """
-    Generate features for each atom in a molecule.
+    Generate atom features and adjacency matrix from a molecule object.
+    
     Args:
-        mol (rdkit.Chem.Mol): RDKit molecule object.
+        mol (Mol): A molecule object from RDKit.
+    
     Returns:
-        features (Tensor): Tensor of atom features.
-        edge_index (Tensor): Tensor of edge indices.
-        edge_attr (Tensor): Tensor of edge attributes.
-        adj (ndarray): Adjacency matrix.
+        features (Tensor): A tensor containing atom features.
+        edge_index (Tensor): Edge indices in COO format for graph representation.
+        edge_attr (Tensor): Attributes of the edges (bonds).
+        adj (numpy.ndarray): Adjacency matrix of the molecule.
     """
-    # Define a list of all elements considered in the dataset.
-    symbols = ['K', 'Y', 'V', 'Sm', 'Dy', 'In', 'Lu', 'Hg', 'Co', 'Mg',
+    # List of elements in the dataset for encoding.
+    symbols = ['K', 'Y', 'V', 'Sm', 'Dy', 'In', 'Lu', 'Hg', 'Co', 'Mg',  
                'Cu', 'Rh', 'Hf', 'O', 'As', 'Ge', 'Au', 'Mo', 'Br', 'Ce',
                'Zr', 'Ag', 'Ba', 'N', 'Cr', 'Sr', 'Fe', 'Gd', 'I', 'Al',
                'B', 'Se', 'Pr', 'Te', 'Cd', 'Pd', 'Si', 'Zn', 'Pb', 'Sn',
@@ -33,7 +29,7 @@ def atom_feature(mol):
                'W', 'H', 'Li', 'Sb', 'Bi', 'La', 'Pt', 'Nb', 'P', 'F', 'C',
                'Re', 'Ta', 'Ir', 'Be', 'Tl']
 
-    # Define possible hybridizations.
+    # Possible hybridization states of the atoms.
     hybridizations = [
         Chem.rdchem.HybridizationType.S,
         Chem.rdchem.HybridizationType.SP,
@@ -44,7 +40,7 @@ def atom_feature(mol):
         'other',
     ]
 
-    # Define possible bond stereochemistries.
+    # Stereochemistry configurations.
     stereos = [
         Chem.rdchem.BondStereo.STEREONONE,
         Chem.rdchem.BondStereo.STEREOANY,
@@ -52,44 +48,42 @@ def atom_feature(mol):
         Chem.rdchem.BondStereo.STEREOE,
     ]
 
+    # Initialize storage for features and adjacency information.
     features = []
     xs = []
     adj = rdmolops.GetAdjacencyMatrix(mol, useBO=True)
     for atom in mol.GetAtoms():
-        # Create a feature vector for each atom.
-        symbol_index = symbols.index(atom.GetSymbol())
+        # Create feature vector for each atom.
         symbol = [0.] * len(symbols)
-        symbol[symbol_index] = 1.
+        symbol[symbols.index(atom.GetSymbol())] = 1.
         degree = [0.] * 8
         degree[atom.GetDegree()] = 1.
         formal_charge = atom.GetFormalCharge()
         radical_electrons = atom.GetNumRadicalElectrons()
-        hybridization_index = hybridizations.index(atom.GetHybridization())
         hybridization = [0.] * len(hybridizations)
-        hybridization[hybridization_index] = 1.
+        hybridization[hybridizations.index(atom.GetHybridization())] = 1.
         aromaticity = 1. if atom.GetIsAromatic() else 0.
         hydrogens = [0.] * 5
         hydrogens[atom.GetTotalNumHs()] = 1.
         chirality = 1. if atom.HasProp('_ChiralityPossible') else 0.
         chirality_type = [0.] * 2
         if atom.HasProp('_CIPCode'):
-            chirality_type_index = ['R', 'S'].index(atom.GetProp('_CIPCode'))
-            chirality_type[chirality_type_index] = 1.
+            chirality_type[['R', 'S'].index(atom.GetProp('_CIPCode'))] = 1.
 
         x = torch.tensor(symbol + degree + [formal_charge] +
                          [radical_electrons] + hybridization +
                          [aromaticity] + hydrogens + [chirality] +
                          chirality_type)
         xs.append(x)
+
         features = torch.stack(xs, dim=0)
 
-    # Process bonds to create graph edges and their attributes.
+    # Process bond information to create graph edges and attributes.
     edge_indices = []
     edge_attrs = []
     for bond in mol.GetBonds():
-        start_atom_idx = bond.GetBeginAtomIdx()
-        end_atom_idx = bond.GetEndAtomIdx()
-        edge_indices += [[start_atom_idx, end_atom_idx], [end_atom_idx, start_atom_idx]]
+        edge_indices += [[bond.GetBeginAtomIdx(), bond.GetEndAtomIdx()]]
+        edge_indices += [[bond.GetEndAtomIdx(), bond.GetBeginAtomIdx()]]
 
         bond_type = bond.GetBondType()
         single = 1. if bond_type == Chem.rdchem.BondType.SINGLE else 0.
@@ -98,28 +92,27 @@ def atom_feature(mol):
         aromatic = 1. if bond_type == Chem.rdchem.BondType.AROMATIC else 0.
         conjugation = 1. if bond.GetIsConjugated() else 0.
         ring = 1. if bond.IsInRing() else 0.
-        stereo = [0.] * len(stereos)
+        stereo = [0.] * 4
         stereo[stereos.index(bond.GetStereo())] = 1.
 
         edge_attr = torch.tensor([single, double, triple, aromatic, conjugation, ring] + stereo)
         edge_attrs += [edge_attr, edge_attr]
 
-    if not edge_attrs:
+    if len(edge_attrs) == 0:
         edge_index = torch.zeros((2, 0), dtype=torch.long)
         edge_attr = torch.zeros((0, 10), dtype=torch.float)
     else:
         edge_index = torch.tensor(edge_indices).t().contiguous()
         edge_attr = torch.stack(edge_attrs, dim=0)
-
     return features, edge_index, edge_attr, adj
 
 class MyOwnDataset(InMemoryDataset):
     """
-    Custom dataset class to handle molecular data for graph neural networks.
+    Custom dataset class for handling graph data derived from molecular structures.
     """
     def __init__(self, root, train=True, transform=None, pre_transform=None, pre_filter=None):
         super().__init__(root, transform, pre_transform, pre_filter)
-        # Load data slices based on training or other mode.
+        # Load different data slices based on whether it's for training or other purposes.
         if train:
             self.data, self.slices = torch.load(self.processed_paths[0])
         else:
@@ -127,26 +120,28 @@ class MyOwnDataset(InMemoryDataset):
 
     @property
     def raw_file_names(self):
-        # Specifies the raw file names required for the dataset.
+        # Specifies the expected raw file names to be found in the directory.
         return ['data_train.csv']
 
     @property
     def processed_file_names(self):
-        # Specifies the processed file names stored after processing.
+        # Specifies the names of the processed files to be saved.
         return ['processed_data_train.pt']
 
     def download(self):
-        # Method to download the data (not implemented here).
+        # Method to handle data downloading (not implemented here).
         pass
 
     def process(self):
-        # Process the raw data file to prepare the dataset for training/validation.
+        """
+        Processes raw data files to prepare graph representations suitable for graph neural network models.
+        """
         df = pd.read_csv(self.raw_paths[0])
         data_list = []
 
         for index, row in tqdm(df.iterrows(), total=df.shape[0], desc="Processing molecules"):
             smile = row['SMILES']
-            label = row['logS']  # LogS values for solubility prediction.
+            label = row['logS']  # Example property to be predicted
             mol = Chem.MolFromSmiles(smile)
 
             if mol is None:
@@ -161,7 +156,7 @@ class MyOwnDataset(InMemoryDataset):
                 edge_attr=edge_attr,
                 y=torch.FloatTensor([label]),
                 A=adj,
-                smiles=str(smile)
+                smiles=str(smile),
             )
             print(graph)
             data_list.append(graph)
@@ -171,7 +166,9 @@ class MyOwnDataset(InMemoryDataset):
             torch.save((self.data, self.slices), self.processed_paths[0])
         else:
             print("No data to save.")
+
         print("Data processing and saving completed.")
+
 
 
 if __name__ == "__main__":
