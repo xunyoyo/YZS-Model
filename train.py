@@ -1,79 +1,201 @@
-import os
-import numpy as np
-import torch
+"""
+By xunyoyo & kesmeey
+Part of code come from GitHub:
+https://github.com/ziduzidu/CSDTI
+"""
+
+import logging
+import math
+import datetime
+
+import torch.nn as nn
+import torch.optim as optim
+from sklearn.metrics import r2_score
+from torch.utils.data import random_split
 from torch_geometric.data import DataLoader
-from sklearn.metrics import r2_score, mean_squared_error
-from model import MYMODEL  # 确保模型文件正确导入
-# 确保MyOwnDataset类已正确定义，用于处理您的数据
-from dataset import MyOwnDataset
+
+from model import YZS
+from smiles2topology import *
 
 
-def save_model(model, model_dir, epoch, val_r2):
-    model_path = os.path.join(model_dir, f"model_epoch_{epoch}_valR2_{val_r2:.4f}.pt")
+def save_model_dict(model, model_dir, msg):
+    model_path = os.path.join(model_dir, msg + '.pt')
     torch.save(model.state_dict(), model_path)
-    print(f"Model saved to {model_path}.")
-
-
-def train(model, train_loader, optimizer, criterion, device):
-    model.train()
-    total_loss = 0.0
-    for data in train_loader:
-        data = data.to(device)
-        optimizer.zero_grad()
-        output = model(data)
-        loss = criterion(output.view(-1), data.y.view(-1))
-        loss.backward()
-        optimizer.step()
-        total_loss += loss.item() * data.num_graphs
-    return total_loss / len(train_loader.dataset)
-
-
-def evaluate(model, loader, criterion, device):
-    model.eval()
-    total_loss = 0.0
-    preds, targets = [], []
-    with torch.no_grad():
-        for data in loader:
-            data = data.to(device)
-            output = model(data)
-            loss = criterion(output.view(-1), data.y.view(-1))
-            total_loss += loss.item() * data.num_graphs
-            preds.append(output.view(-1).cpu().numpy())
-            targets.append(data.y.view(-1).cpu().numpy())
-    preds = np.concatenate(preds)
-    targets = np.concatenate(targets)
-    rmse = mean_squared_error(targets, preds, squared=False)
-    r2 = r2_score(targets, preds)
-    return total_loss / len(loader.dataset), rmse, r2
+    print("model has been saved to %s." % model_path)
 
 
 def main():
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = MYMODEL().to(device)  # 请根据实际模型调整构造函数
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-    criterion = torch.nn.MSELoss()
 
-    # 假设已经定义了MyOwnDataset
-    train_dataset = MyOwnDataset("./data/train.csv")
-    val_dataset = MyOwnDataset("./data/val.csv")
-    test_dataset = MyOwnDataset("./data/test.csv")
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    log_file = os.path.join('log', f"{current_time}-model.log")
 
-    train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=64, shuffle=False)
-    test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
+    logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s - %(message)s')
+    logging.info('Training started')
 
-    for epoch in range(1, 101):  # 假设训练100个epochs
-        train_loss = train(model, train_loader, optimizer, criterion, device)
-        val_loss, val_rmse, val_r2 = evaluate(model, val_loader, criterion, device)
-        test_loss, test_rmse, test_r2 = evaluate(model, test_loader, criterion, device)
+    params = dict(
+        data_root="Datasets",
+        save_dir="save",
+        dataset="Ceasvlu",
+        save_model=True,
+        lr=0.0005202938443000005,
+        batch_size=40,
+        is_using_trained_data=False,
+        model_name=""
+    )
 
-        print(
-            f"Epoch: {epoch}, Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}, Val RMSE: {val_rmse:.4f}, Val R2: {val_r2:.4f}, Test Loss: {test_loss:.4f}, Test RMSE: {test_rmse:.4f}, Test R2: {test_r2:.4f}")
+    save_dir = params.get("save_dir")
+    save_model = params.get("save_model")
+    DATASET = params.get("dataset")
+    data_root = params.get("data_root")
+    fpath = os.path.join(data_root, DATASET)
 
-        # 可以根据验证集的R2或其他指标保存最佳模型
-        if val_r2 > 0.8:  # 假设使用0.8作为保存阈值
-            save_model(model, "./models", epoch, val_r2)
+    full_dataset = MyOwnDataset(fpath, train=True)
+    test_dataset1 = MyOwnDataset(os.path.join(data_root, "APtest"), train=True)
+    test_dataset2 = MyOwnDataset(os.path.join(data_root, "Llinas2020"), train=True)
 
 
-if __name__ == "__main__":
+    train_size = int(0.9 * len(full_dataset))
+    val_size = len(full_dataset) - train_size
+
+    train_set, val_set = random_split(full_dataset, [train_size, val_size])
+
+    train_loader = DataLoader(train_set, batch_size=64, shuffle=True, num_workers=1)
+    val_loader = DataLoader(val_set, batch_size=64, shuffle=True, num_workers=1)
+    test1_loader = DataLoader(test_dataset1, batch_size=64, shuffle=True, num_workers=1)
+    test2_loader = DataLoader(test_dataset2, batch_size=64, shuffle=True, num_workers=1)
+
+    device = torch.device('cuda:0')
+
+    model = YZS(92, 98, 0.30467697373969527, 4, 16).to(device)
+
+    if params.get('is_using_trained_data'):
+        model.load_state_dict(torch.load(os.path.join(save_dir, params.get("model_name"))))
+
+    epochs = 6000
+    steps_per_epoch = 15
+    num_iter = math.ceil((epochs * steps_per_epoch) / len(train_loader))
+
+    optimizer = optim.Adam(model.parameters(), lr=params.get("lr"))
+    criterion = nn.MSELoss()
+
+    best_val_r2 = -float('inf')
+    epochs_no_improve = 0
+    early_stop_epoch = 300
+
+
+    for epoch in range(num_iter):
+
+        model.train()
+        train_loss = 0.0
+        train_preds = []
+        train_targets = []
+
+        for data in train_loader:
+
+            data = data.to(device)
+            pred = model(data)
+            loss = criterion(pred.view(-1), data.y.view(-1))
+
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            train_loss += loss.item() * data.num_graphs
+            train_preds.extend(pred.view(-1).detach().cpu().numpy())
+            train_targets.extend(data.y.view(-1).detach().cpu().numpy())
+
+        train_r2 = r2_score(train_targets, train_preds)
+
+        model.eval()
+        val_loss = 0.0
+        val_preds = []
+        val_targets = []
+
+        with torch.no_grad():
+            for data in val_loader:
+                data = data.to(device)
+                pred = model(data)
+                loss = criterion(pred.view(-1), data.y.view(-1))
+
+                val_loss += loss.item() * data.num_graphs
+                val_preds.extend(pred.view(-1).detach().cpu().numpy())
+                val_targets.extend(data.y.view(-1).detach().cpu().numpy())
+
+        val_r2 = r2_score(val_targets, val_preds)
+
+        model.eval()
+        test1_loss = 0.0
+        test1_preds = []
+        test1_targets = []
+
+        with torch.no_grad():
+            for data in test1_loader:
+                data = data.to(device)
+                pred = model(data)
+                loss = criterion(pred.view(-1), data.y.view(-1))
+
+                test1_loss += loss.item() * data.num_graphs
+                test1_preds.extend(pred.view(-1).detach().cpu().numpy())
+                test1_targets.extend(data.y.view(-1).detach().cpu().numpy())
+
+        test1_r2 = r2_score(test1_targets, test1_preds)
+
+        model.eval()
+        test2_loss = 0.0
+        test2_preds = []
+        test2_targets = []
+
+        with torch.no_grad():
+            for data in test2_loader:
+                data = data.to(device)
+                pred = model(data)
+                loss = criterion(pred.view(-1), data.y.view(-1))
+
+                test2_loss += loss.item() * data.num_graphs
+                test2_preds.extend(pred.view(-1).detach().cpu().numpy())
+                test2_targets.extend(data.y.view(-1).detach().cpu().numpy())
+
+        test2_r2 = r2_score(test2_targets, test2_preds)
+
+        train_loss = math.sqrt(train_loss / len(train_loader.dataset))
+        val_loss = math.sqrt(val_loss / len(val_loader.dataset))
+        test1_loss = math.sqrt(test1_loss / len(test1_loader.dataset))
+        test2_loss = math.sqrt(test2_loss / len(test2_loader.dataset))
+
+        msg = (f"Epoch {epoch + 1}-{num_iter}, Train Loss_ {train_loss:.4f}, Val Loss_ {val_loss:.4f}, "
+               f"Test1 Loss_ {test1_loss:.4f}, Test2 Loss_ {test2_loss:.4f}, Train R2_ {train_r2:.4f}, Val R2_ {val_r2:.4f}, "
+               f"Test1 R2_ {test1_r2:.4f}, Test2 R2_ {test2_r2:.4f}")
+
+        logging.info(msg)
+        print(msg)
+
+        if save_model:
+            save_model_dict(model, save_dir, msg)
+            msg = os.path.join(save_dir, msg + '.pt')
+            logging.info(f"model has been saved to save {msg}")
+
+        if val_r2 > best_val_r2:
+            best_val_r2 = val_r2
+            epochs_no_improve = 0
+
+        else:
+            epochs_no_improve += 1
+
+        if epochs_no_improve >= early_stop_epoch:
+            logging.info(f"Early stopping triggered after {early_stop_epoch} epochs without improvement.")
+            print(f"Early stopping triggered after {early_stop_epoch} epochs without improvement.")
+            break
+
+
+if __name__ == '__main__':
+
+    log_dir = 'log'
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+
+    log_dir = 'save'
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+
+
     main()

@@ -10,7 +10,7 @@ import logging
 from torch.utils.data import random_split
 from torch_geometric.data import DataLoader
 from hyperopt import fmin, tpe, hp, STATUS_OK, Trials
-from model import MYMODEL
+from model import YZS
 from smiles2topology import *
 
 
@@ -35,7 +35,7 @@ def objective(params):
     device = torch.device('cuda:0')
     # model = MYMODEL(24, int(params['dim']), params['dropout'], int(params['depth']), int(params['heads']), int(params['dim_head']),
     #                 int(params['mlp_dim'])).to(device)
-    model = MYMODEL(num_features=92, dim=int(params['dim']), dropout=params['dropout'], depth=int(params['depth']), heads=int(params['heads'])).to(device)
+    model = YZS(num_features=92, dim=int(params['dim']), dropout=params['dropout'], depth=int(params['depth']), heads=int(params['heads'])).to(device)
 
     epochs = 60000
     steps_per_epoch = 15

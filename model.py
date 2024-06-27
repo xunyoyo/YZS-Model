@@ -107,9 +107,9 @@ class Transformer(nn.Module):
         return self.norm(x)
 
 
-class MYMODEL(torch.nn.Module):
+class YZS(torch.nn.Module):
     def __init__(self, num_features=92, dim=128, dropout=0.251903250716151, depth=6, heads=8):
-        super(MYMODEL, self).__init__()
+        super(YZS, self).__init__()
 
         self.dropout = nn.Dropout(dropout)
         self.relu = nn.ReLU()
@@ -155,4 +155,4 @@ class MYMODEL(torch.nn.Module):
 
 
 if __name__ == '__main__':
-    MYMODEL()
+    YZS()

@@ -10,7 +10,7 @@ import numpy as np
 from torch_geometric.data import DataLoader
 from sklearn.metrics import r2_score, mean_squared_error
 
-from model import MYMODEL
+from model import YZS
 from smiles2topology import *
 
 
@@ -45,7 +45,7 @@ def main():
         data_root="Datasets",
         save_dir="save",
         dataset="xunyoyotest",
-        model_name="Epoch 127-643, Train Loss_ 0.7335, Val Loss_ 0.8871, Test1 Loss_ 0.5720, Test2 Loss_ 1.0204, Train R2_ 0.8891, Val R2_ 0.8442, Test1 R2_ 0.5851, Test2 R2_ 0.3502.pt"
+        model_name=""
     )
 
     save_dir = params.get("save_dir")
@@ -57,7 +57,7 @@ def main():
     test_loader = DataLoader(test_dataset, batch_size=72, shuffle=True, num_workers=4)
 
     device = torch.device('cuda:0')
-    model = MYMODEL(92, 98, 0.30467697373969527, 4, 16).to(device)
+    model = YZS(92, 98, 0.30467697373969527, 4, 16).to(device)
 
     model.load_state_dict(torch.load(os.path.join(save_dir, params.get("model_name"))))
 
