@@ -39,6 +39,8 @@ authors:
     + e-mail:zxsdsama@gmail.com
 + Haowei Ming, Peking University (PRC, Beijing)
 + Jian He, Xinjiang University (PRC, Xinjiang)
++ Yao Lu, Shihezi University (PRC, Xinjiang)
++ Junhong Chen, {South China University of Technology, NetEase Inc.} (PRC, {Guangdong, Zhejiang})
 
 Statement:
 + Part of code come from:
