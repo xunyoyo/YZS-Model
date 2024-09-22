@@ -31,6 +31,7 @@ You can download the training and testing dataset from:
 + `model.py`: The whole YZS-model.
 + `opti.py`: Using searching package to find the perfect parameters.
 + `train.py`: Training the YZS-model.
++ `test.py`:Tests and evaluates the YZS model.
 
 ## About
 
@@ -48,5 +49,5 @@ Statement:
 https://github.com/ziduzidu/CSDTI
 https://github.com/ltorres97/FS-CrossTR
 https://github.com/waqarahmadm019/AquaPred
-``` 
+```
 When using the above-mentioned open-source code, we have already indicated this in the documents.
